@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Book, ReadingNote, ReadingStatus, UpdateBookStatus } from "@shared/schema";
+import { Book, ReadingNote, ReadingStatus, ReadingStatusType, UpdateBookStatus } from "@shared/schema";
 import { ChevronLeft, Calendar, Plus, PencilLine, Trash2, ChevronDown, Camera } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { HalfStarRating } from "@/lib/starRating";
@@ -122,7 +122,7 @@ export default function BookDetail({ id }: BookDetailProps) {
     
     const updateData: UpdateBookStatus = {
       id: book.id,
-      status: status as ReadingStatusType
+      status: status as "want" | "reading" | "completed"
     };
     
     // 완독 상태로 변경 시 별점과 완독일 추가
@@ -139,7 +139,7 @@ export default function BookDetail({ id }: BookDetailProps) {
     
     updateStatusMutation.mutate({
       id: book.id,
-      status: book.status as ReadingStatus[keyof typeof ReadingStatus],
+      status: book.status as "want" | "reading" | "completed",
       rating,
     });
   };

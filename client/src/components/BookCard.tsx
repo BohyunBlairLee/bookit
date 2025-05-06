@@ -90,7 +90,7 @@ export default function BookCard({ book, isSearchResult = false }: BookCardProps
   const handleStatusChange = (value: string) => {
     setStatus(value);
     
-    if (!isSearchResult && 'id' in book) {
+    if (!isSearchResult && 'id' in book && typeof book.id === 'number') {
       const updateData = {
         id: book.id,
         status: value,
