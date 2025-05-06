@@ -25,12 +25,15 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
   
   const addBookMutation = useMutation({
     mutationFn: async () => {
+      // publishedDate를 Date 객체로 변환
+      const publishedDate = book.publishedDate ? new Date(book.publishedDate) : null;
+      
       const bookData = {
         title: book.title,
         author: book.author,
         coverUrl: book.coverUrl,
         publisher: book.publisher,
-        publishedDate: book.publishedDate,
+        publishedDate: publishedDate,
         userId: 1, // 더미 사용자 ID
         status,
       };
@@ -40,7 +43,7 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
         return apiRequest("POST", "/api/books", {
           ...bookData,
           rating,
-          completedDate: new Date().toISOString()
+          completedDate: new Date()
         });
       }
       

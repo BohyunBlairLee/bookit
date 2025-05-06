@@ -102,7 +102,7 @@ export default function BookCard({ book, isSearchResult = false }: BookCardProps
         updateBookMutation.mutate({
           ...updateData,
           rating: typedBook.rating || 0,
-          completedDate: new Date().toISOString()
+          completedDate: new Date()
         });
       } else {
         updateBookMutation.mutate(updateData);
