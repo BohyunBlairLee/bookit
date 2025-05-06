@@ -9,21 +9,24 @@ export default function Home() {
   const [showAddBookModal, setShowAddBookModal] = useState<boolean>(false);
   
   const {
-    data: searchResults = [],
+    data,
     isLoading,
     isError,
     refetch
-  } = useQuery<BookSearchResult[]>({
+  } = useQuery({
     queryKey: ["/api/books/search", query],
     queryFn: async ({ queryKey }) => {
       const searchQuery = queryKey[1] as string;
-      if (!searchQuery) return [];
+      if (!searchQuery) return { results: [], total: 0 };
       const res = await fetch(`/api/books/search?q=${encodeURIComponent(searchQuery)}`);
       if (!res.ok) throw new Error("Failed to search books");
       return res.json();
     },
     enabled: false, // 자동 fetch 방지, 사용자가 검색 버튼을 클릭할 때만 실행
   });
+  
+  // API 응답 구조에 맞게 searchResults 추출
+  const searchResults = data?.results || [];
   
   const handleSearch = () => {
     if (!query.trim()) return;

@@ -18,13 +18,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   }
 
-  // Search books
+  // Search books using Kakao API
   app.get("/api/books/search", async (req: Request, res: Response) => {
     try {
       const query = req.query.q as string;
-      const results = searchBooks(query);
+      const results = await searchBooks(query); // searchBooks is now async
       res.json(results);
     } catch (error) {
+      console.error("Book search error:", error);
       res.status(500).json({ message: "Failed to search books", error: String(error) });
     }
   });
