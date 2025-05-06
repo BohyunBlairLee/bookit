@@ -487,10 +487,7 @@ export default function BookDetail({ id }: BookDetailProps) {
                             <button 
                               className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100"
                               onClick={() => {
-                                toast({ 
-                                  title: "카메라 기능", 
-                                  description: "카메라롤에서 추출 기능은 현재 개발 중입니다." 
-                                });
+                                handleFileSelect();
                                 setShowCameraOptions(false);
                               }}
                             >
@@ -557,6 +554,15 @@ export default function BookDetail({ id }: BookDetailProps) {
           </div>
         )}
       </div>
+      
+      {/* 숨겨진 파일 입력 요소 */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        className="hidden"
+        accept="image/*"
+        onChange={handleFileChange}
+      />
     </div>
   );
 }

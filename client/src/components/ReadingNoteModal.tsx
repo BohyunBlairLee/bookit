@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { Camera, FileUpload, BookOpen, Pencil, Type } from "lucide-react";
+import { Camera, Upload, BookOpen, Pencil, Type } from "lucide-react";
 import { insertReadingNoteSchema } from "@shared/schema";
 import { toast } from "@/hooks/use-toast";
 
@@ -172,7 +172,7 @@ export default function ReadingNoteModal({
                     disabled={isUploading}
                     title="사진에서 텍스트 가져오기"
                   >
-                    <FileUpload className="w-4 h-4 mr-1" />
+                    <Upload className="w-4 h-4 mr-1" />
                     {isUploading ? "처리 중..." : "사진 업로드"}
                   </Button>
                 </div>
@@ -212,7 +212,7 @@ export default function ReadingNoteModal({
                     disabled={isUploading}
                     title="사진에서 텍스트 가져오기"
                   >
-                    <FileUpload className="w-4 h-4 mr-1" />
+                    <Upload className="w-4 h-4 mr-1" />
                     {isUploading ? "처리 중..." : "사진 업로드"}
                   </Button>
                 </div>
