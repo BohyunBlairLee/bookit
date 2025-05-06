@@ -27,25 +27,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   }
 
-  // Search books using Kakao API
+  // Search books using Kakao API (GET 방식)
   app.get("/api/books/search", async (req: Request, res: Response) => {
     try {
-      // 해리포터 검색 테스트를 위한 하드코딩 (임시)
-      const testQuery = req.query.q === 'í´ë¦¬í¬í\në°' ? '해리포터' : (req.query.q as string);
-      
-      const query = testQuery;
+      const query = req.query.q as string;
       if (!query) {
         return res.status(400).json({ error: "Search query is required" });
       }
       
-      console.log(`📚 검색 요청: "${query}"`);
-      
-      // 디버깅을 위한 원본 문자 코드 확인
-      console.log('📚 문자 코드:');
-      for (let i = 0; i < query.length; i++) {
-        console.log(`${query[i]}: ${query.charCodeAt(i)}`);
+      console.log(`📚 GET 검색 요청: "${query}"`);
+      const results = await searchBooks(query);
+      return res.json(results);
+    } catch (error) {
+      console.error("Book search error:", error);
+      res.status(500).json({ message: "Failed to search books", error: String(error) });
+    }
+  });
+  
+  // Search books using Kakao API (POST 방식 - 한글 처리를 위해 추가)
+  app.post("/api/books/search", async (req: Request, res: Response) => {
+    try {
+      const { query } = req.body;
+      if (!query) {
+        return res.status(400).json({ error: "Search query is required" });
       }
       
+      console.log(`📚 POST 검색 요청: "${query}"`);
       const results = await searchBooks(query);
       return res.json(results);
     } catch (error) {
