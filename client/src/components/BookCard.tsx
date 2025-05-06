@@ -114,11 +114,13 @@ export default function BookCard({ book, isSearchResult = false }: BookCardProps
   // Render a search result card
   const renderSearchResultCard = () => (
     <div className="book-card bg-white rounded-lg shadow-md overflow-hidden transition-all">
-      <img 
-        src={book.coverUrl}
-        alt={`${book.title} 책 표지`}
-        className="w-full h-56 object-cover"
-      />
+      <div className="relative pb-[140%]">
+        <img 
+          src={book.coverUrl}
+          alt={`${book.title} 책 표지`}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      </div>
       <div className="p-4">
         <h3 className="font-bold text-lg mb-1 text-primary">{book.title}</h3>
         <p className="text-gray-600 text-sm mb-3">{book.author}</p>
@@ -164,11 +166,13 @@ export default function BookCard({ book, isSearchResult = false }: BookCardProps
         className="book-card bg-white rounded-lg shadow-md overflow-hidden transition-all cursor-pointer"
         onClick={() => setShowDetailDialog(true)}
       >
-        <img 
-          src={book.coverUrl}
-          alt={`${book.title} 책 표지`}
-          className="w-full h-56 object-cover"
-        />
+        <div className="relative pb-[140%]">
+          <img 
+            src={book.coverUrl}
+            alt={`${book.title} 책 표지`}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        </div>
         <div className="p-4">
           <div className="flex justify-between items-start mb-2">
             <h3 className="font-bold text-lg text-primary">{book.title}</h3>
@@ -200,11 +204,13 @@ export default function BookCard({ book, isSearchResult = false }: BookCardProps
         className="book-card bg-white rounded-lg shadow-md overflow-hidden transition-all cursor-pointer"
         onClick={() => setShowDetailDialog(true)}
       >
-        <img 
-          src={book.coverUrl}
-          alt={`${book.title} 책 표지`}
-          className="w-full h-56 object-cover"
-        />
+        <div className="relative pb-[140%]">
+          <img 
+            src={book.coverUrl}
+            alt={`${book.title} 책 표지`}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        </div>
         <div className="p-4">
           <div className="flex justify-between items-start mb-2">
             <h3 className="font-bold text-lg text-primary">{book.title}</h3>
@@ -229,11 +235,13 @@ export default function BookCard({ book, isSearchResult = false }: BookCardProps
       className="book-card bg-white rounded-lg shadow-md overflow-hidden transition-all cursor-pointer"
       onClick={() => setShowDetailDialog(true)}
     >
-      <img 
-        src={book.coverUrl}
-        alt={`${book.title} 책 표지`}
-        className="w-full h-56 object-cover"
-      />
+      <div className="relative pb-[140%]">
+        <img 
+          src={book.coverUrl}
+          alt={`${book.title} 책 표지`}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      </div>
       <div className="p-4">
         <div className="flex justify-between items-start mb-2">
           <h3 className="font-bold text-lg text-primary">{book.title}</h3>
