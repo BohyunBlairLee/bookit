@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Book, ReadingNote, ReadingStatus, UpdateBookStatus } from "@shared/schema";
-import { ChevronLeft, Calendar, Plus, PencilLine, Trash2, ChevronDown } from "lucide-react";
+import { ChevronLeft, Calendar, Plus, PencilLine, Trash2, ChevronDown, Camera } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { HalfStarRating } from "@/lib/starRating";
 import { apiRequest } from "@/lib/queryClient";
