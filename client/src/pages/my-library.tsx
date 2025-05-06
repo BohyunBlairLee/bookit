@@ -79,7 +79,7 @@ export default function MyLibrary() {
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-3 gap-3 mt-4 pb-20">
+        <div className="book-grid mt-4">
           {booksToShow.map((book: Book) => (
             <BookCard 
               key={book.id} 
