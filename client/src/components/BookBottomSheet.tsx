@@ -43,7 +43,7 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
         return apiRequest("POST", "/api/books", {
           ...bookData,
           rating,
-          completedDate: new Date()
+          completedDate: new Date().toISOString()
         });
       }
       
