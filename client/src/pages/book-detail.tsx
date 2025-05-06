@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Book, ReadingNote, ReadingStatus, ReadingStatusType, UpdateBookStatus } from "@shared/schema";
-import { ChevronLeft, Calendar, Plus, PencilLine, Trash2, ChevronDown, Camera } from "lucide-react";
+import { BookOpen, ChevronLeft, Calendar, Plus, PencilLine, PenTool, Quote, Trash2, ChevronDown, Camera } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { HalfStarRating } from "@/lib/starRating";
 import { apiRequest } from "@/lib/queryClient";
@@ -387,37 +387,62 @@ export default function BookDetail({ id }: BookDetailProps) {
         {showNoteTypeModal && (
           <>
             <div className="fixed inset-0 bg-black bg-opacity-50 z-40" onClick={() => setShowNoteTypeModal(false)}></div>
-            <div className="note-type-modal">
-              <button 
-                className="note-type-option" 
-                onClick={() => {
-                  setActiveNoteType('quote');
-                  setShowNoteTypeModal(false);
-                  setIsAddingNote(true);
-                }}
-              >
-                책 속 문장 수집하기
-              </button>
-              <button 
-                className="note-type-option" 
-                onClick={() => {
-                  setActiveNoteType('thought');
-                  setShowNoteTypeModal(false);
-                  setIsAddingNote(true);
-                }}
-              >
-                생각 메모하기
-              </button>
-              <button 
-                className="note-type-option" 
-                onClick={() => {
-                  setActiveNoteType('combined');
-                  setShowNoteTypeModal(false);
-                  setIsAddingNote(true);
-                }}
-              >
-                문장과 메모 함께 기록하기
-              </button>
+            <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl p-5 z-50 shadow-lg transition-transform duration-300 transform translate-y-0 pb-8">
+              <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-5"></div>
+              <h3 className="text-lg font-bold mb-5 text-center">기록 유형 선택</h3>
+              
+              <div className="space-y-3">
+                <button 
+                  className="flex items-center w-full p-4 rounded-lg bg-purple-50 border border-purple-100 hover:bg-purple-100 transition-colors" 
+                  onClick={() => {
+                    setActiveNoteType('quote');
+                    setShowNoteTypeModal(false);
+                    setIsAddingNote(true);
+                  }}
+                >
+                  <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3">
+                    <Quote size={20} className="text-purple-500" />
+                  </div>
+                  <div className="text-left">
+                    <h4 className="font-medium">책 속 문장 수집하기</h4>
+                    <p className="text-xs text-gray-500 mt-1">인상깊은 책 속 구절을 저장합니다</p>
+                  </div>
+                </button>
+                
+                <button 
+                  className="flex items-center w-full p-4 rounded-lg bg-blue-50 border border-blue-100 hover:bg-blue-100 transition-colors" 
+                  onClick={() => {
+                    setActiveNoteType('thought');
+                    setShowNoteTypeModal(false);
+                    setIsAddingNote(true);
+                  }}
+                >
+                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                    <PenTool size={20} className="text-blue-500" />
+                  </div>
+                  <div className="text-left">
+                    <h4 className="font-medium">생각 메모하기</h4>
+                    <p className="text-xs text-gray-500 mt-1">책을 읽으며 떠오른 생각을 기록합니다</p>
+                  </div>
+                </button>
+                
+                <button 
+                  className="flex items-center w-full p-4 rounded-lg bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-100 hover:from-purple-100 hover:to-blue-100 transition-colors" 
+                  onClick={() => {
+                    setActiveNoteType('combined');
+                    setShowNoteTypeModal(false);
+                    setIsAddingNote(true);
+                  }}
+                >
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-100 to-blue-100 flex items-center justify-center mr-3">
+                    <BookOpen size={20} className="text-purple-700" />
+                  </div>
+                  <div className="text-left">
+                    <h4 className="font-medium">문장과 메모 함께 기록하기</h4>
+                    <p className="text-xs text-gray-500 mt-1">인용구와 생각을 함께 저장합니다</p>
+                  </div>
+                </button>
+              </div>
             </div>
           </>
         )}
@@ -425,21 +450,33 @@ export default function BookDetail({ id }: BookDetailProps) {
         {/* 노트 입력 화면 */}
         {isAddingNote && activeNoteType && (
           <div className="note-input-screen">
-            <div className="note-input-header">
-              <button onClick={() => {
-                setIsAddingNote(false);
-                setActiveNoteType(null);
-                setNewNote('');
-                setNewQuote('');
-              }}>
-                <ChevronLeft size={24} />
+            <div className="flex items-center justify-between py-3 px-2 border-b border-gray-200 mb-4">
+              <button 
+                className="rounded-full p-2 hover:bg-gray-100"
+                onClick={() => {
+                  setIsAddingNote(false);
+                  setActiveNoteType(null);
+                  setNewNote('');
+                  setNewQuote('');
+                }}
+              >
+                <ChevronLeft size={20} className="text-gray-600" />
               </button>
-              <h2>
-                {activeNoteType === 'quote' ? '책 속 문장 수집하기' : 
-                 activeNoteType === 'thought' ? '생각 메모하기' : '문장과 메모 함께 기록하기'}
+              <h2 className="text-base font-bold text-center">
+                {activeNoteType === 'quote' 
+                  ? <div className="flex items-center"><Quote size={16} className="text-purple-500 mr-1.5" /> 책 속 문장 수집하기</div> 
+                  : activeNoteType === 'thought' 
+                    ? <div className="flex items-center"><PenTool size={16} className="text-blue-500 mr-1.5" /> 생각 메모하기</div> 
+                    : <div className="flex items-center"><BookOpen size={16} className="text-purple-700 mr-1.5" /> 문장과 메모 함께 기록하기</div>}
               </h2>
               <button 
-                className="text-primary"
+                className={`rounded-full px-3 py-1 ${
+                  (activeNoteType === 'quote' && newQuote.trim()) || 
+                  (activeNoteType === 'thought' && newNote.trim()) || 
+                  (activeNoteType === 'combined' && newQuote.trim() && newNote.trim())
+                    ? 'bg-primary text-white' 
+                    : 'bg-gray-100 text-gray-400'
+                }`}
                 onClick={() => {
                   if (addNoteMutation.isPending) return;
                   
@@ -456,23 +493,28 @@ export default function BookDetail({ id }: BookDetailProps) {
             
             <div className="note-input-content">
               {(activeNoteType === 'quote' || activeNoteType === 'combined') && (
-                <>
-                  {activeNoteType === 'quote' && <h3 className="text-lg font-bold mb-2">책 속 문장</h3>}
-                  <div className="bg-purple-50 border-l-4 border-purple-500 p-4 rounded-lg mb-4">
+                <div className="mb-6">
+                  <div className="flex items-center mb-3">
+                    <div className="w-1 h-5 bg-purple-500 rounded mr-2"></div>
+                    <h3 className="text-base font-bold">책 속 문장</h3>
+                  </div>
+                  <div className="bg-purple-50 border-l-4 border-purple-400 rounded-r-md overflow-hidden">
                     <textarea
-                      className="w-full bg-transparent border-none resize-none focus:ring-0 p-0"
+                      className="w-full bg-transparent border-none resize-none focus:ring-0 p-4"
                       placeholder="인상깊었던 책 속 문장을 입력하세요..."
                       value={newQuote}
                       onChange={(e) => setNewQuote(e.target.value)}
                       rows={4}
                       autoFocus={activeNoteType === 'quote'}
+                      style={{fontSize: '15px'}}
                     />
-                    <div className="flex justify-end">
+                    <div className="flex justify-between items-center px-4 py-2 border-t border-purple-100">
+                      <p className="text-xs text-purple-500 italic">따옴표(")는 자동으로 추가됩니다</p>
                       <button 
-                        className="text-purple-600"
+                        className="text-purple-600 p-2 rounded-full hover:bg-purple-100"
                         onClick={() => setShowCameraOptions(true)}
                       >
-                        <Camera size={20} />
+                        <Camera size={18} />
                       </button>
                       
                       {/* 카메라 옵션 모달 */}
@@ -506,22 +548,25 @@ export default function BookDetail({ id }: BookDetailProps) {
                       )}
                     </div>
                   </div>
-                </>
+                </div>
               )}
               
               {(activeNoteType === 'thought' || activeNoteType === 'combined') && (
-                <>
-                  {activeNoteType === 'thought' && <h3 className="text-lg font-bold mb-2">나의 생각</h3>}
-                  {activeNoteType === 'combined' && <h3 className="text-lg font-bold mb-2">나의 생각</h3>}
+                <div>
+                  <div className="flex items-center mb-3">
+                    <div className="w-1 h-5 bg-blue-500 rounded mr-2"></div>
+                    <h3 className="text-base font-bold">나의 생각</h3>
+                  </div>
                   <textarea
-                    className="w-full bg-gray-50 border border-gray-200 rounded-lg p-4 resize-none min-h-[150px]"
+                    className="w-full bg-blue-50 border border-blue-100 rounded-lg p-4 resize-none min-h-[150px]"
                     placeholder="독서 중 떠오른 생각을 기록해보세요..."
                     value={newNote}
                     onChange={(e) => setNewNote(e.target.value)}
                     rows={6}
                     autoFocus={activeNoteType === 'thought'}
+                    style={{fontSize: '15px'}}
                   />
-                </>
+                </div>
               )}
             </div>
           </div>
@@ -544,25 +589,86 @@ export default function BookDetail({ id }: BookDetailProps) {
               <span role="img" aria-label="메모장" className="mr-2">📔</span>
               <p className="text-sm font-medium">독서 노트</p>
             </div>
-            {notes.map((note) => (
-              <div key={note.id} className="bg-gray-100 rounded-lg p-4 mb-3 relative">
-                <div className="flex justify-between">
-                  <div className="w-1 h-full bg-primary absolute left-0 top-0 bottom-0 rounded-l-lg"></div>
-                  <p className="text-xs text-gray-500 text-right absolute right-4 top-4">
-                    {new Date(note.createdAt).toLocaleDateString('ko-KR')}
-                  </p>
+            {notes.map((note) => {
+              // 인용구 패턴을 확인 - 쌍따옴표로 시작하는지 검사
+              const isQuote = note.content.trim().startsWith('"') && note.content.includes('"');
+              
+              // 인용구와 생각이 함께 있는 패턴 검사 (쌍따옴표로 시작하고 줄바꿈이 두 번 이상 있는 경우)
+              const hasBoth = isQuote && note.content.includes('\n\n');
+              
+              // 내용 분리
+              let quoteContent = '';
+              let thoughtContent = '';
+              
+              if (hasBoth) {
+                // 인용구와 생각이 함께 있는 경우
+                const parts = note.content.split('\n\n');
+                quoteContent = parts[0]; // 첫 부분은 인용구
+                thoughtContent = parts.slice(1).join('\n\n'); // 나머지는 생각
+              } else if (isQuote) {
+                // 인용구만 있는 경우
+                quoteContent = note.content;
+              } else {
+                // 생각만 있는 경우
+                thoughtContent = note.content;
+              }
+              
+              return (
+                <div key={note.id} className="bg-white rounded-lg p-4 mb-5 relative shadow-sm border border-gray-100">
+                  <div className="flex justify-between mb-2">
+                    <div className={`w-1 h-full absolute left-0 top-0 bottom-0 rounded-l-lg ${quoteContent && thoughtContent ? 'bg-gradient-to-b from-purple-400 to-blue-400' : quoteContent ? 'bg-purple-400' : 'bg-blue-400'}`}></div>
+                    <div className="flex items-center">
+                      {quoteContent && <div className="w-3 h-3 rounded-full bg-purple-400 mr-1"></div>}
+                      {thoughtContent && <div className="w-3 h-3 rounded-full bg-blue-400 mr-1"></div>}
+                    </div>
+                    <p className="text-xs text-gray-500 text-right">
+                      {new Date(note.createdAt).toLocaleDateString('ko-KR')}
+                    </p>
+                  </div>
+                  
+                  {/* 인용구 부분 */}
+                  {quoteContent && (
+                    <div className="mb-4">
+                      <div className="flex items-center mb-2">
+                        <div className="w-1 h-4 bg-purple-400 rounded mr-2"></div>
+                        <p className="text-xs font-medium text-purple-700">인용구</p>
+                      </div>
+                      <div className="bg-purple-50 border-l-4 border-purple-300 p-3 rounded-r-md">
+                        <p className="whitespace-pre-wrap text-gray-800 italic">
+                          {quoteContent}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* 생각 부분 */}
+                  {thoughtContent && (
+                    <div className={`${quoteContent ? 'mt-4' : ''}`}>
+                      {quoteContent && (
+                        <div className="flex items-center mb-2">
+                          <div className="w-1 h-4 bg-blue-400 rounded mr-2"></div>
+                          <p className="text-xs font-medium text-blue-700">나의 생각</p>
+                        </div>
+                      )}
+                      <div className={`${quoteContent ? 'bg-blue-50 border-l-4 border-blue-300 p-3 rounded-r-md' : ''}`}>
+                        <p className="whitespace-pre-wrap text-gray-800">
+                          {thoughtContent}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div className="flex justify-end mt-3">
+                    <button 
+                      className="text-gray-400 hover:text-red-500 p-1" 
+                      onClick={() => handleDeleteNote(note.id)}
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
                 </div>
-                <p className="mt-6 whitespace-pre-wrap text-gray-800">{note.content}</p>
-                <div className="flex justify-end mt-2">
-                  <button 
-                    className="text-gray-400 hover:text-red-500" 
-                    onClick={() => handleDeleteNote(note.id)}
-                  >
-                    <Trash2 size={14} />
-                  </button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
