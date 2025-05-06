@@ -149,10 +149,13 @@ html, body {
   text-align: center;
   padding: 0.5rem 0;
   border-radius: 0.5rem;
-  font-size: 0.75rem;
+  font-size: 0.95rem;
   font-weight: 500;
   background: #f1f5f9;
   color: #64748b;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .status-button.active {
@@ -263,30 +266,15 @@ html, body {
   max-width: 100% !important;
 }
 
-/* Sheet 바텀시트 커스텀 스타일 */
-[data-radix-popper-content-wrapper] {
-  bottom: 0 !important; 
-  top: auto !important;
-  transform: none !important;
-  position: fixed !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  left: 0 !important;
-  right: 0 !important;
-  margin: 0 !important;
+/* SimpleBottomSheet 커스텀 스타일 */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-[data-side="bottom"] {
-  animation: slideUp 0.3s ease-out;
-  border-bottom-left-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
-  width: 100% !important;
-  margin: 0 !important;
-  max-height: 85vh !important;
-  z-index: 50 !important;
-  height: auto !important;
-  border-top-left-radius: 1rem !important;
-  border-top-right-radius: 1rem !important;
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
 }
 
 .bottom-sheet-handle {

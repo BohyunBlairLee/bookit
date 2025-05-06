@@ -189,7 +189,7 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
           </>
         )}
         
-        {/* 버튼 */}
+        {/* 책 추가하기 버튼 */}
         <button
           className="w-full bg-primary text-white py-3 rounded-md font-medium"
           onClick={handleAddBook}

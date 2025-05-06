@@ -26,7 +26,7 @@ const BottomNav = () => {
       </a>
       <a href="/library" className={`bottom-nav-item ${location === "/library" ? "active" : ""}`}>
         <Book size={20} />
-        <span className="text-xs mt-1">내 서재</span>
+        <span className="text-xs mt-1">나의 책장</span>
       </a>
       <a href="/settings" className={`bottom-nav-item ${location === "/settings" ? "active" : ""}`}>
         <Settings size={20} />
