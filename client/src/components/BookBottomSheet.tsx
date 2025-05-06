@@ -25,18 +25,25 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
   
   const addBookMutation = useMutation({
     mutationFn: async () => {
-      return apiRequest("POST", "/api/books", {
+      const bookData = {
         title: book.title,
         author: book.author,
         coverUrl: book.coverUrl,
         publisher: book.publisher,
         publishedDate: book.publishedDate,
         status,
-        ...(status === ReadingStatus.COMPLETED && {
+      };
+      
+      // 완독 상태일 때는 추가 정보 포함
+      if (status === ReadingStatus.COMPLETED) {
+        return apiRequest("POST", "/api/books", {
+          ...bookData,
           rating,
-          completedDate
-        })
-      });
+          completedDate: new Date().toISOString()
+        });
+      }
+      
+      return apiRequest("POST", "/api/books", bookData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/books'] });

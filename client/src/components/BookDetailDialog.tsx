@@ -140,7 +140,13 @@ export default function BookDetailDialog({ book, open, onOpenChange }: BookDetai
                 <Button 
                   variant={status === ReadingStatus.COMPLETED ? "default" : "outline"}
                   className={status === ReadingStatus.COMPLETED ? "bg-accent hover:bg-accent/90 text-white font-bold shadow-md" : ""}
-                  onClick={() => setStatus(ReadingStatus.COMPLETED)}
+                  onClick={() => {
+                    setStatus(ReadingStatus.COMPLETED);
+                    // 기본값 설정
+                    if (!completedDate) {
+                      setCompletedDate(new Date());
+                    }
+                  }}
                 >
                   완독!
                 </Button>

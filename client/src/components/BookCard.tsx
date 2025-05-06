@@ -91,14 +91,22 @@ export default function BookCard({ book, isSearchResult = false }: BookCardProps
     setStatus(value);
     
     if (!isSearchResult && 'id' in book) {
-      updateBookMutation.mutate({
+      const updateData = {
         id: book.id,
         status: value,
-        ...(value === 'completed' && { 
-          rating: book.rating || 0,
+      };
+      
+      // 완독 상태로 변경할 때는 필수 필드 추가
+      if (value === 'completed') {
+        const typedBook = book as Book;
+        updateBookMutation.mutate({
+          ...updateData,
+          rating: typedBook.rating || 0,
           completedDate: new Date().toISOString()
-        })
-      });
+        });
+      } else {
+        updateBookMutation.mutate(updateData);
+      }
     }
   };
 
