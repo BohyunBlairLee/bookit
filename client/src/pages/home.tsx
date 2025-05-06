@@ -7,6 +7,36 @@ import BookBottomSheet from "@/components/BookBottomSheet";
 // 책 아이템 컴포넌트 (바텀시트 상태 처리를 위해 분리)
 function BookItem({ book }: { book: BookSearchResult }) {
   const [showBottomSheet, setShowBottomSheet] = useState(false);
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  
+  // Add book mutation - 클릭시 바로 추가 동작 제거
+  const addBookMutation = useMutation({
+    mutationFn: async () => {
+      return apiRequest("POST", "/api/books", {
+        title: book.title,
+        author: book.author,
+        coverUrl: book.coverUrl,
+        publisher: book.publisher,
+        publishedDate: book.publishedDate,
+        status: ReadingStatus.WANT,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/books'] });
+      toast({
+        title: "책이 내 서재에 추가되었습니다!",
+        description: `"${book.title}"이(가) 내 서재에 추가되었습니다.`,
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "책을 추가하지 못했습니다",
+        description: String(error),
+        variant: "destructive",
+      });
+    }
+  });
   
   return (
     <div>
@@ -32,13 +62,11 @@ function BookItem({ book }: { book: BookSearchResult }) {
         </div>
       </div>
       
-      {showBottomSheet && (
-        <BookBottomSheet 
-          book={book}
-          open={showBottomSheet}
-          onClose={() => setShowBottomSheet(false)}
-        />
-      )}
+      <BookBottomSheet 
+        book={book}
+        open={showBottomSheet}
+        onClose={() => setShowBottomSheet(false)}
+      />
     </div>
   );
 }

@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { StarRating } from "@/lib/starRating";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { format } from "date-fns";
 
 interface BookBottomSheetProps {
@@ -119,6 +119,9 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
   return (
     <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="bottom-sheet-dialog">
+        <DialogTitle className="sr-only">책 정보</DialogTitle>
+        <DialogDescription className="sr-only">{book.title} 책의 상세 정보와 독서 상태를 선택할 수 있습니다.</DialogDescription>
+        
         <div className="book-bottom-sheet">
           <div className="bottom-sheet-handle mb-4"></div>
           
@@ -148,7 +151,7 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
               읽는 중
             </button>
             <button 
-              className={`status-button rounded-md py-3 ${status === ReadingStatus.WANT ? 'bg-gray-100' : 'bg-gray-100'}`}
+              className={`status-button rounded-md py-3 ${status === ReadingStatus.WANT ? 'bg-primary text-white' : 'bg-gray-100'}`}
               onClick={() => handleStatusChange(ReadingStatus.WANT)}
             >
               읽을 예정
