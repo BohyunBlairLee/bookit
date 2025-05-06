@@ -263,6 +263,32 @@ html, body {
   max-width: 100% !important;
 }
 
+/* Sheet 바텀시트 커스텀 스타일 */
+[data-radix-popper-content-wrapper] {
+  bottom: 0 !important; 
+  top: auto !important;
+  transform: none !important;
+}
+
+[data-side="bottom"].bottom-sheet {
+  animation: slideUp 0.3s ease-out;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  width: 100% !important;
+  margin: 0 !important;
+  max-height: 85vh !important;
+  z-index: 50 !important;
+  height: auto !important;
+}
+
+[data-side="bottom"].bottom-sheet .bottom-sheet-handle {
+  width: 36px;
+  height: 4px;
+  background-color: #e5e7eb;
+  border-radius: 2px;
+  margin: 0 auto 1rem auto;
+}
+
 .bottom-sheet-handle {
   width: 36px;
   height: 4px;

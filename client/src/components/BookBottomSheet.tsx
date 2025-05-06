@@ -1,12 +1,18 @@
 import { useState } from "react";
-import { Book, BookSearchResult, ReadingStatus } from "@shared/schema";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { BookSearchResult, ReadingStatus } from "@shared/schema";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { StarRating } from "@/lib/starRating";
-import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { format } from "date-fns";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 
 interface BookBottomSheetProps {
   book: BookSearchResult;
@@ -46,7 +52,7 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
       });
       onClose();
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({
         title: "책을 추가하지 못했습니다",
         description: String(error),
@@ -65,11 +71,9 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
   
   const renderDatePicker = () => {
     // 실제 달력 구현은 복잡하므로 간단한 모달형태로 표현
-    
     const today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth() + 1;
-    const day = today.getDate();
     
     // 달력 표시 배열 생성 (예시: 4월)
     const daysInMonth = new Array(30).fill(0).map((_, i) => i + 1);
@@ -117,13 +121,15 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
   };
   
   return (
-    <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="bottom-sheet-dialog">
-        <DialogTitle className="sr-only">책 정보</DialogTitle>
-        <DialogDescription className="sr-only">{book.title} 책의 상세 정보와 독서 상태를 선택할 수 있습니다.</DialogDescription>
+    <Sheet open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
+      <SheetContent side="bottom" className="px-0 py-4 rounded-t-xl">
+        <SheetHeader className="text-left px-4">
+          <SheetTitle className="sr-only">책 정보</SheetTitle>
+          <SheetDescription className="sr-only">{book.title} 책의 상세 정보와 독서 상태를 선택할 수 있습니다.</SheetDescription>
+        </SheetHeader>
         
-        <div className="book-bottom-sheet">
-          <div className="bottom-sheet-handle mb-4"></div>
+        <div className="book-bottom-sheet px-4">
+          <div className="bottom-sheet-handle mb-4 mx-auto"></div>
           
           <div className="flex mb-6">
             <img 
@@ -206,7 +212,7 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
             {addBookMutation.isPending ? "추가 중..." : "책 추가하기"}
           </button>
         </div>
-      </DialogContent>
-    </Dialog>
+      </SheetContent>
+    </Sheet>
   );
 }

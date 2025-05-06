@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { BookSearchResult } from "@shared/schema";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { BookSearchResult, ReadingStatus } from "@shared/schema";
 import { Search, X, Plus, BookOpen } from "lucide-react";
 import BookBottomSheet from "@/components/BookBottomSheet";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 
 // 책 아이템 컴포넌트 (바텀시트 상태 처리를 위해 분리)
 function BookItem({ book }: { book: BookSearchResult }) {
