@@ -266,10 +266,13 @@ export default function BookCard({ book, isSearchResult = false }: BookCardProps
           onClick={(e) => {
             e.stopPropagation();
             if (!isSearchResult && 'id' in book) {
-              updateBookMutation.mutate({
-                id: book.id,
-                status: ReadingStatus.READING,
-              });
+              const typedBook = book as Book;
+              if (typedBook.id) {
+                updateBookMutation.mutate({
+                  id: typedBook.id,
+                  status: ReadingStatus.READING,
+                });
+              }
             }
           }}
           disabled={updateBookMutation.isPending}

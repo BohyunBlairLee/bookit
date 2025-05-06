@@ -10,14 +10,18 @@ import { BookSearchResult } from "@shared/schema";
 export default function SearchSection() {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
+  const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(null);
   
   // Debounce search input
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
-    clearTimeout(window.searchTimeout);
-    window.searchTimeout = setTimeout(() => {
+    if (searchTimeout) {
+      clearTimeout(searchTimeout);
+    }
+    const timeout = setTimeout(() => {
       setDebouncedQuery(e.target.value);
-    }, 500) as unknown as number;
+    }, 500);
+    setSearchTimeout(timeout);
   };
 
   // Handle search button click
@@ -35,7 +39,14 @@ export default function SearchSection() {
   // Search query
   const { data, isLoading } = useQuery({
     queryKey: ['/api/books/search', debouncedQuery],
-    queryFn: undefined,
+    queryFn: async () => {
+      // 한글 검색어가 제대로 전달되도록 인코딩 없이 URL 매개변수로 전달
+      const res = await fetch(`/api/books/search?q=${debouncedQuery}`);
+      if (!res.ok) {
+        throw new Error('검색에 실패했습니다');
+      }
+      return res.json();
+    },
     enabled: debouncedQuery.length > 0,
   });
 
