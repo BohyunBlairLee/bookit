@@ -282,7 +282,7 @@ html, body {
   height: 4px;
   background-color: #e5e7eb;
   border-radius: 2px;
-  margin: 0 auto 1rem auto;
+  margin: 0 auto 0.5rem auto;
 }
 
 .calendar-modal {
@@ -304,12 +304,13 @@ html, body {
 
 /* 바텀시트 읽기 상태 버튼 */
 .status-buttons button {
-  padding: 12px;
-  border-radius: 12px;
+  padding: 10px;
+  border-radius: 10px;
   font-weight: 500;
   border: none;
   cursor: pointer;
   transition: all 0.2s ease;
+  font-size: 0.9rem;
 }
 
 .star-rating {

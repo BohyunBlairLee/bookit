@@ -117,11 +117,11 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
   return (
     <SimpleBottomSheet open={open} onClose={onClose} title="책 추가하기">
       <div className="book-bottom-sheet">
-        <div className="flex mb-6">
+        <div className="flex mb-3">
           <img 
             src={book.coverUrl}
             alt={book.title}
-            className="w-24 h-36 rounded-md object-cover mr-4"
+            className="w-20 h-28 rounded-md object-cover mr-4"
           />
           <div>
             <h2 className="text-lg font-medium">{book.title}</h2>
@@ -135,7 +135,7 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
         </div>
         
         {/* 상태 선택 버튼 */}
-        <div className="status-buttons grid grid-cols-3 gap-3 my-6">
+        <div className="status-buttons grid grid-cols-3 gap-3 my-4">
           <button 
             className={`status-button ${status === ReadingStatus.READING ? 'bg-primary text-white' : 'bg-gray-100'}`}
             onClick={() => handleStatusChange(ReadingStatus.READING)}
@@ -159,7 +159,7 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
         {/* 완독 상태일 때만 표시될 별점과 날짜 선택 */}
         {status === ReadingStatus.COMPLETED && (
           <>
-            <div className="mb-4">
+            <div className="mb-2">
               <div className="flex justify-between items-center">
                 <p className="text-sm">평점</p>
                 <p className="text-sm">{rating.toFixed(1)}</p>
@@ -173,7 +173,7 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
               </div>
             </div>
             
-            <div className="mb-6">
+            <div className="mb-3">
               <div className="flex justify-between items-center mb-2">
                 <p className="text-sm">완독일</p>
                 <button 
@@ -191,7 +191,7 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
         
         {/* 책 추가하기 버튼 */}
         <button
-          className="w-full bg-primary text-white py-4 rounded-xl font-medium text-lg mt-8"
+          className="w-full bg-primary text-white py-3 rounded-xl font-medium text-base mt-4 mb-2"
           onClick={handleAddBook}
           disabled={addBookMutation.isPending}
         >
