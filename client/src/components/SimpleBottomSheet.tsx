@@ -41,10 +41,10 @@ export default function SimpleBottomSheet({ open, onClose, children, title }: Si
       />
       
       <div 
-        className="fixed inset-x-0 bottom-0 z-50 max-h-[95vh] rounded-t-xl bg-white pb-4 px-5 pt-3"
-        style={{ animation: 'slideUp 0.3s ease-out forwards' }}
+        className="fixed inset-x-0 bottom-0 z-50 rounded-t-xl bg-white"
+        style={{ animation: 'slideUp 0.3s ease-out forwards', maxHeight: '80vh', display: 'flex', flexDirection: 'column', paddingBottom: 'env(safe-area-inset-bottom, 16px)' }}
       >
-        <div className="relative">
+        <div className="px-4 pt-3 pb-2">
           <div className="bottom-sheet-handle mx-auto"></div>
           
           {title && (
@@ -58,13 +58,10 @@ export default function SimpleBottomSheet({ open, onClose, children, title }: Si
               </button>
             </div>
           )}
-          
-          <div 
-            ref={sheetRef} 
-            className="overflow-y-auto"
-          >
-            {children}
-          </div>
+        </div>
+        
+        <div className="px-4 pb-4 flex-1 overflow-auto" ref={sheetRef}>
+          {children}
         </div>
       </div>
     </div>
