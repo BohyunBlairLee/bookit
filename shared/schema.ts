@@ -50,8 +50,8 @@ const baseInsertBookSchema = createInsertSchema(books).omit({
 
 // 날짜 필드를 문자열로 처리하도록 수정된 삽입 스키마
 export const insertBookSchema = baseInsertBookSchema.extend({
-  publishedDate: z.string().nullable().transform(val => val ? new Date(val) : null),
-  completedDate: z.string().nullable().transform(val => val ? new Date(val) : null),
+  publishedDate: z.string().optional().nullable().transform(val => val ? new Date(val) : null),
+  completedDate: z.string().optional().nullable().transform(val => val ? new Date(val) : null),
 });
 
 export const insertReadingNoteSchema = createInsertSchema(readingNotes).omit({
