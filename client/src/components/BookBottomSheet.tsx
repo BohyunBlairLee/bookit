@@ -122,14 +122,15 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
   
   return (
     <Sheet open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <SheetContent side="bottom" className="px-0 py-4 rounded-t-xl bottom-sheet">
+      <SheetContent side="bottom" className="px-0 pb-6 pt-2">
+        <div className="bottom-sheet-handle mb-4 mx-auto"></div>
+        
         <SheetHeader className="text-left px-4">
           <SheetTitle className="sr-only">책 정보</SheetTitle>
           <SheetDescription className="sr-only">{book.title} 책의 상세 정보와 독서 상태를 선택할 수 있습니다.</SheetDescription>
         </SheetHeader>
         
         <div className="book-bottom-sheet px-4">
-          <div className="bottom-sheet-handle mb-4 mx-auto"></div>
           
           <div className="flex mb-6">
             <img 
