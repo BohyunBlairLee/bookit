@@ -46,8 +46,8 @@ export default function SearchSection() {
   });
 
   // Safely access the data with correct typing
-  const searchResults = data && 'results' in data ? data.results : [];
-  const totalResults = data && 'total' in data ? data.total : 0;
+  const searchResults: BookSearchResult[] = data && typeof data === 'object' && 'results' in data ? data.results as BookSearchResult[] : [];
+  const totalResults: number = data && typeof data === 'object' && 'total' in data ? data.total as number : 0;
 
   return (
     <>
@@ -130,17 +130,23 @@ export default function SearchSection() {
                   <div className="p-4">
                     <h3 className="font-bold text-lg mb-1 text-primary line-clamp-2">{book.title}</h3>
                     <p className="text-gray-600 text-sm mb-3 line-clamp-1">{book.author}</p>
-                    <Button
-                      variant="outline"
-                      className="w-full mt-2 text-sm text-secondary border-secondary hover:bg-secondary/10"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedBook(book);
-                        setBottomSheetOpen(true);
-                      }}
-                    >
-                      자세히 보기
-                    </Button>
+                    <div className="flex justify-between items-center">
+                      <p className="text-xs text-gray-500 line-clamp-1">
+                        {book.publisher || "출판사 정보 없음"}
+                      </p>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-secondary hover:text-primary hover:bg-secondary/10"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedBook(book);
+                          setBottomSheetOpen(true);
+                        }}
+                      >
+                        자세히
+                      </Button>
+                    </div>
                   </div>
                 </div>
               ))}
