@@ -42,10 +42,21 @@ export const readingNotes = pgTable("reading_notes", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const insertBookSchema = createInsertSchema(books).omit({
-  id: true,
-  createdAt: true,
-});
+export const insertBookSchema = createInsertSchema(books)
+  .omit({
+    id: true,
+    createdAt: true,
+  })
+  .transform((data) => {
+    // publishedDate가 문자열로 전달되면 Date 객체로 변환
+    if (data.publishedDate && typeof data.publishedDate === 'string') {
+      return { 
+        ...data, 
+        publishedDate: new Date(data.publishedDate)
+      };
+    }
+    return data;
+  });
 
 export const insertReadingNoteSchema = createInsertSchema(readingNotes).omit({
   id: true,

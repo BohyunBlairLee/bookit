@@ -62,7 +62,8 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
       userId: 1,
       status: status as "want" | "reading" | "completed",
       publisher: book.publisher || "",
-      publishedDate: book.publishedDate ? new Date(book.publishedDate) : undefined
+      // 날짜 처리: publishedDate를 서버에서 처리 가능한 형식으로 변환
+      publishedDate: book.publishedDate ? new Date(book.publishedDate).toISOString() : null
     });
   };
 
