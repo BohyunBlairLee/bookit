@@ -31,6 +31,7 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
         coverUrl: book.coverUrl,
         publisher: book.publisher,
         publishedDate: book.publishedDate,
+        userId: 1, // 더미 사용자 ID
         status,
       };
       

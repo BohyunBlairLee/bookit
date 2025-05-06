@@ -93,7 +93,7 @@ export default function BookCard({ book, isSearchResult = false }: BookCardProps
     if (!isSearchResult && 'id' in book && typeof book.id === 'number') {
       const updateData = {
         id: book.id,
-        status: value,
+        status: value as "want" | "reading" | "completed",
       };
       
       // 완독 상태로 변경할 때는 필수 필드 추가
