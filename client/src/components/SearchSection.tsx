@@ -1,21 +1,27 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import BookCard from "./BookCard";
 import { BookSearchResult } from "@shared/schema";
+import BookBottomSheet from "./BookBottomSheet";
 
 export default function SearchSection() {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
+  const [selectedBook, setSelectedBook] = useState<BookSearchResult | null>(null);
+  const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
   
   // Debounce search input
+  const timeoutRef = useRef<number | null>(null);
+  
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
-    clearTimeout(window.searchTimeout);
-    window.searchTimeout = setTimeout(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
       setDebouncedQuery(e.target.value);
     }, 500) as unknown as number;
   };
@@ -39,8 +45,9 @@ export default function SearchSection() {
     enabled: debouncedQuery.length > 0,
   });
 
-  const searchResults = data?.results || [];
-  const totalResults = data?.total || 0;
+  // Safely access the data with correct typing
+  const searchResults = data && 'results' in data ? data.results : [];
+  const totalResults = data && 'total' in data ? data.total : 0;
 
   return (
     <>
@@ -105,11 +112,37 @@ export default function SearchSection() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {searchResults.map((book: BookSearchResult) => (
-                <BookCard 
+                <div 
                   key={book.id || `${book.title}-${book.author}`}
-                  book={book}
-                  isSearchResult
-                />
+                  className="book-card bg-white rounded-lg shadow-md overflow-hidden transition-all cursor-pointer"
+                  onClick={() => {
+                    setSelectedBook(book);
+                    setBottomSheetOpen(true);
+                  }}
+                >
+                  <div className="relative pb-[140%]">
+                    <img 
+                      src={book.coverUrl}
+                      alt={`${book.title} 책 표지`}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-bold text-lg mb-1 text-primary line-clamp-2">{book.title}</h3>
+                    <p className="text-gray-600 text-sm mb-3 line-clamp-1">{book.author}</p>
+                    <Button
+                      variant="outline"
+                      className="w-full mt-2 text-sm text-secondary border-secondary hover:bg-secondary/10"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedBook(book);
+                        setBottomSheetOpen(true);
+                      }}
+                    >
+                      자세히 보기
+                    </Button>
+                  </div>
+                </div>
               ))}
               {searchResults.length === 0 && debouncedQuery && (
                 <div className="col-span-full text-center py-10">
@@ -119,6 +152,17 @@ export default function SearchSection() {
             </div>
           )}
         </section>
+      )}
+
+      {selectedBook && (
+        <BookBottomSheet 
+          book={selectedBook}
+          open={bottomSheetOpen}
+          onClose={() => {
+            setBottomSheetOpen(false);
+            setSelectedBook(null);
+          }}
+        />
       )}
     </>
   );
