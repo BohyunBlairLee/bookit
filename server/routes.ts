@@ -86,11 +86,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       console.log("📚 Book add request:", JSON.stringify(req.body, null, 2));
       
+      const requestData = { ...req.body, userId: MOCK_USER_ID };
+      
+      // publishedDate 처리 - 문자열이면 Date 객체로 변환
+      if (requestData.publishedDate && typeof requestData.publishedDate === 'string') {
+        try {
+          requestData.publishedDate = new Date(requestData.publishedDate);
+          console.log("📚 Converted publishedDate to Date object:", requestData.publishedDate);
+        } catch (dateError) {
+          console.error("📚 Date conversion error:", dateError);
+        }
+      }
+      
       // Validate request body
-      const validatedData = insertBookSchema.parse({
-        ...req.body,
-        userId: MOCK_USER_ID
-      });
+      const validatedData = insertBookSchema.parse(requestData);
 
       console.log("📚 Validated book data:", JSON.stringify(validatedData, null, 2));
       const newBook = await dbStorage.addBook(validatedData);

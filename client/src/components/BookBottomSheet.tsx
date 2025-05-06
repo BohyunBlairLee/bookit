@@ -29,11 +29,22 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
   // Add book mutation
   const addBookMutation = useMutation({
     mutationFn: async (newBook: any) => {
-      console.log("Adding book:", newBook);
-      const res = await apiRequest("POST", "/api/books", newBook);
-      const data = await res.json();
-      console.log("Response:", data);
-      return data;
+      console.log("Adding book:", JSON.stringify(newBook, null, 2));
+      
+      try {
+        const res = await apiRequest("POST", "/api/books", newBook);
+        if (!res.ok) {
+          const errorData = await res.json();
+          console.error("Server error response:", JSON.stringify(errorData, null, 2));
+          throw new Error(errorData.message || "Failed to add book");
+        }
+        const data = await res.json();
+        console.log("Success response:", JSON.stringify(data, null, 2));
+        return data;
+      } catch (error) {
+        console.error("Error in mutation:", error);
+        throw error;
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/books'] });
@@ -44,11 +55,11 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
       });
       onClose();
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error("Error adding book:", error);
       toast({
         title: "책을 추가하지 못했습니다",
-        description: String(error),
+        description: error.message || String(error),
         variant: "destructive",
       });
     }

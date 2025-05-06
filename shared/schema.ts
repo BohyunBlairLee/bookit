@@ -42,20 +42,15 @@ export const readingNotes = pgTable("reading_notes", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+// 날짜 필드를 옵셔널로 처리하는 스키마
 export const insertBookSchema = createInsertSchema(books)
   .omit({
     id: true,
     createdAt: true,
   })
-  .transform((data) => {
-    // publishedDate가 문자열로 전달되면 Date 객체로 변환
-    if (data.publishedDate && typeof data.publishedDate === 'string') {
-      return { 
-        ...data, 
-        publishedDate: new Date(data.publishedDate)
-      };
-    }
-    return data;
+  .extend({
+    // publishedDate를 옵셔널 Date로 명시
+    publishedDate: z.date().optional(),
   });
 
 export const insertReadingNoteSchema = createInsertSchema(readingNotes).omit({
