@@ -6,6 +6,7 @@ import BookBottomSheet from "@/components/BookBottomSheet";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import useEmblaCarousel from 'embla-carousel-react';
+import { Link } from "wouter";
 
 // 책 아이템 컴포넌트 (바텀시트 상태 처리를 위해 분리)
 function BookItem({ book }: { book: BookSearchResult }) {

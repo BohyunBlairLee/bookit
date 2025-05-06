@@ -1,4 +1,4 @@
-import { Switch, Route, useLocation } from "wouter";
+import { Switch, Route, Link } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -8,33 +8,8 @@ import Home from "@/pages/home";
 import MyLibrary from "@/pages/my-library";
 import SettingsPage from "@/pages/settings";
 import BookDetail from "@/pages/book-detail";
-import { Home as HomeIcon, Book, Settings, ChevronLeft } from "lucide-react";
-
-const BottomNav = () => {
-  const [location] = useLocation();
-  const shouldShowNav = !location.includes("/books/") && 
-                        !location.includes("/search/") && 
-                        !location.includes("/notes/");
-
-  if (!shouldShowNav) return null;
-
-  return (
-    <div className="bottom-nav">
-      <a href="/" className={`bottom-nav-item ${location === "/" ? "active" : ""}`}>
-        <HomeIcon size={20} />
-        <span className="text-xs mt-1">홈</span>
-      </a>
-      <a href="/library" className={`bottom-nav-item ${location === "/library" ? "active" : ""}`}>
-        <Book size={20} />
-        <span className="text-xs mt-1">나의 책장</span>
-      </a>
-      <a href="/settings" className={`bottom-nav-item ${location === "/settings" ? "active" : ""}`}>
-        <Settings size={20} />
-        <span className="text-xs mt-1">설정</span>
-      </a>
-    </div>
-  );
-};
+import BottomNav from "./BottomNav";
+import { ChevronLeft } from "lucide-react";
 
 function Router() {
   return (
@@ -43,7 +18,7 @@ function Router() {
         <Route path="/" component={Home} />
         <Route path="/library" component={MyLibrary} />
         <Route path="/settings" component={SettingsPage} />
-        <Route path="/books/:id">
+        <Route path="/book/:id">
           {(params) => <BookDetail id={Number(params.id)} />}
         </Route>
         <Route path="/search/details">
@@ -61,9 +36,9 @@ function Router() {
             return (
               <div className="page-container">
                 <div className="mobile-header">
-                  <a href="/" className="text-muted-foreground">
+                  <Link to="/" className="text-muted-foreground">
                     <ChevronLeft size={24} />
-                  </a>
+                  </Link>
                   <h1 className="text-lg font-medium">검색 결과</h1>
                   <div></div>
                 </div>
