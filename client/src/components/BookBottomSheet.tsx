@@ -68,9 +68,9 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
 
   return (
     <SimpleBottomSheet open={open} onClose={onClose}>
-      <div className="px-1 py-2">
-        <div className="flex gap-5 mb-5">
-          <div className="w-1/3 aspect-[3/4] overflow-hidden rounded-md flex-shrink-0">
+      <div className="p-4">
+        <div className="flex flex-row gap-4 mb-4">
+          <div className="w-28 h-40 overflow-hidden rounded-lg flex-shrink-0">
             <img
               src={book.coverUrl}
               alt={`${book.title} 책 표지`}
@@ -78,40 +78,39 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
             />
           </div>
           <div className="flex-1">
-            <h3 className="text-xl font-bold mb-1 break-keep">{book.title}</h3>
-            <div className="flex flex-col gap-2">
-              <p className="text-gray-500 text-sm">{book.author}</p>
-              {book.publisher && <p className="text-gray-500 text-xs">출판사: {book.publisher}</p>}
-              {book.publishedDate && (
-                <p className="text-gray-500 text-xs">
-                  출판일: {new Date(book.publishedDate).toLocaleDateString('ko-KR')}
-                </p>
-              )}
-            </div>
+            <h3 className="text-xl font-bold mb-1">{book.title}</h3>
+            <p className="text-gray-500 text-sm mb-1">{book.author}</p>
+            {book.publisher && book.publishedDate && (
+              <p className="text-gray-500 text-xs mb-2">
+                {book.publisher} | {new Date(book.publishedDate).toLocaleDateString('ko-KR', {year: "numeric", month: "long"})}
+              </p>
+            )}
           </div>
         </div>
-        
-        <div className="mb-4">
-          <h4 className="text-sm font-medium mb-2 text-gray-700">독서 상태</h4>
-          <Select
-            value={status}
-            onValueChange={setStatus}
+
+        <div className="flex flex-row gap-2 mb-4">
+          <Button
+            className={`flex-1 rounded-lg py-3 ${status === ReadingStatus.READING ? 'bg-[#7950F2] text-white' : 'bg-gray-200 text-gray-700'}`}
+            onClick={() => setStatus(ReadingStatus.READING)}
           >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="독서 상태 선택" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value={ReadingStatus.WANT}>읽을 예정</SelectItem>
-                <SelectItem value={ReadingStatus.READING}>읽는 중</SelectItem>
-                <SelectItem value={ReadingStatus.COMPLETED}>완독!</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+            읽는 중
+          </Button>
+          <Button
+            className={`flex-1 rounded-lg py-3 ${status === ReadingStatus.WANT ? 'bg-[#7950F2] text-white' : 'bg-gray-200 text-gray-700'}`}
+            onClick={() => setStatus(ReadingStatus.WANT)}
+          >
+            읽을 예정
+          </Button>
+          <Button
+            className={`flex-1 rounded-lg py-3 ${status === ReadingStatus.COMPLETED ? 'bg-[#7950F2] text-white' : 'bg-gray-200 text-gray-700'}`}
+            onClick={() => setStatus(ReadingStatus.COMPLETED)}
+          >
+            완독!
+          </Button>
         </div>
         
         <Button 
-          className="w-full bg-secondary hover:bg-secondary/90"
+          className="w-full bg-[#7950F2] hover:bg-[#7950F2]/90 py-5 rounded-lg text-white"
           onClick={handleAddBook}
           disabled={addBookMutation.isPending}
         >
@@ -120,7 +119,7 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
           ) : (
             <Plus className="h-5 w-5 mr-2" />
           )}
-          내 서재에 추가하기
+          책 추가하기
         </Button>
       </div>
     </SimpleBottomSheet>

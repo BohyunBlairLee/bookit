@@ -15,8 +15,8 @@
   --input: 214.3 31.8% 91.4%;
   --primary: 262 83.3% 57.8%;  /* 보라색 */
   --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96.1%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
+  --secondary: 262 83.3% 57.8%;  /* secondary도 보라색으로 설정 */
+  --secondary-foreground: 210 40% 98%;
   --accent: 210 40% 96.1%;
   --accent-foreground: 222.2 47.4% 11.2%;
   --destructive: 0 84.2% 60.2%;
