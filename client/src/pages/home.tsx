@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { BookSearchResult, ReadingStatus } from "@shared/schema";
-import { Search, X, Plus, BookOpen } from "lucide-react";
+import { BookSearchResult, ReadingStatus, Book } from "@shared/schema";
+import { Search, X, Plus, BookOpen, ChevronRight } from "lucide-react";
 import BookBottomSheet from "@/components/BookBottomSheet";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import useEmblaCarousel from 'embla-carousel-react';
 
 // 책 아이템 컴포넌트 (바텀시트 상태 처리를 위해 분리)
 function BookItem({ book }: { book: BookSearchResult }) {
@@ -77,7 +78,10 @@ export default function Home() {
   const [query, setQuery] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [showAddBookModal, setShowAddBookModal] = useState<boolean>(false);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const [currentIndex, setCurrentIndex] = useState(0);
   
+  // 책 검색 쿼리
   const {
     data,
     isLoading,
@@ -94,6 +98,36 @@ export default function Home() {
     },
     enabled: false, // 자동 fetch 방지, 사용자가 검색 버튼을 클릭할 때만 실행
   });
+  
+  // 내 책 목록 가져오기
+  const { data: myBooks, isLoading: isLoadingBooks } = useQuery({
+    queryKey: ['/api/books'],
+    queryFn: async () => {
+      const res = await fetch('/api/books');
+      if (!res.ok) throw new Error('Failed to fetch books');
+      return res.json();
+    }
+  });
+  
+  // 읽고 있는 책만 필터링
+  const readingBooks = myBooks ? myBooks.filter((book: Book) => book.status === ReadingStatus.READING) : [];
+  
+  // 캐러셀 코드
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setCurrentIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    
+    emblaApi.on('select', onSelect);
+    onSelect();
+    
+    return () => {
+      emblaApi.off('select', onSelect);
+    };
+  }, [emblaApi, onSelect]);
   
   // API 응답 구조에 맞게 searchResults 추출
   const searchResults = data?.results || [];
@@ -147,20 +181,71 @@ export default function Home() {
       </div>
       
       {!isSearching && (
-        <div className="flex flex-col items-center justify-center h-[70vh]">
-          <BookOpen size={48} className="text-muted-foreground mb-4" />
-          <p className="text-center text-muted-foreground">
-            읽고 있는 책이 없어요!
-            <br/>
-            책을 추가하고 독서 기록을 시작하세요 :)
-          </p>
-          <button 
-            className="purple-button mt-6 max-w-xs"
-            onClick={() => setShowAddBookModal(true)}
-          >
-            책 추가하기
-          </button>
-        </div>
+        <>
+          {isLoadingBooks ? (
+            <div className="flex justify-center items-center h-[50vh]">
+              <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
+            </div>
+          ) : readingBooks.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-[70vh]">
+              <BookOpen size={48} className="text-muted-foreground mb-4" />
+              <p className="text-center text-muted-foreground">
+                읽고 있는 책이 없어요!
+                <br/>
+                책을 추가하고 독서 기록을 시작하세요 :)
+              </p>
+              <button 
+                className="purple-button mt-6 max-w-xs"
+                onClick={() => setShowAddBookModal(true)}
+              >
+                책 추가하기
+              </button>
+            </div>
+          ) : (
+            <div className="mt-6">
+              <div className="flex items-center mb-4">
+                <div className="flex items-center">
+                  <span className="text-orange-500 mr-1">🔥</span>
+                  <h2 className="text-lg font-bold">읽는 중</h2>
+                </div>
+                <div className="book-counter ml-auto">
+                  {currentIndex + 1}권 / {readingBooks.length}권
+                </div>
+              </div>
+
+              <div className="reading-book-carousel">
+                <div className="overflow-hidden" ref={emblaRef}>
+                  <div className="flex">
+                    {readingBooks.map((book: Book) => (
+                      <div className="flex-[0_0_100%]" key={book.id}>
+                        <div className="reading-book-container">
+                          <img
+                            src={book.coverUrl}
+                            alt={book.title}
+                            className="reading-book-cover"
+                          />
+                          <h3 className="book-title">{book.title}</h3>
+                          <p className="book-author">{book.author}</p>
+                          <p className="book-info">
+                            {book.publisher} | {book.publishedDate ? new Date(book.publishedDate).getFullYear() + '년 ' + (new Date(book.publishedDate).getMonth() + 1) + '월' : ''}
+                          </p>
+                          <button className="continue-reading-button">
+                            독서 기록하기
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {readingBooks.length > 1 && (
+                  <div className="carousel-arrows">
+                    <ChevronRight size={24} />
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </>
       )}
       
       {isSearching && (

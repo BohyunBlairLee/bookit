@@ -102,6 +102,84 @@ html, body {
   border-bottom: 1px solid var(--border);
 }
 
+/* 현재 읽는 책 캐러셀 */
+.reading-book-carousel {
+  position: relative;
+  width: 100%;
+}
+
+.reading-book-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem;
+}
+
+.reading-book-cover {
+  width: 80%;
+  max-width: 320px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-bottom: 1.5rem;
+}
+
+.book-counter {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.carousel-arrows {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ccc;
+  font-size: 2rem;
+}
+
+.book-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.book-author {
+  font-size: 1rem;
+  color: #666;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.book-info {
+  font-size: 0.9rem;
+  color: #888;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.continue-reading-button {
+  background-color: hsl(var(--primary));
+  color: white;
+  border: none;
+  border-radius: 100px;
+  padding: 1rem 0;
+  font-size: 1rem;
+  font-weight: 500;
+  width: 80%;
+  max-width: 320px;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.continue-reading-button:hover {
+  background-color: hsl(var(--primary) / 0.9);
+}
+
 /* 검색 입력 스타일 */
 .search-input {
   background: #f1f5f9;
