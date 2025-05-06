@@ -77,21 +77,6 @@ export class MemStorage implements IStorage {
   async addBook(insertBook: InsertBook): Promise<Book> {
     const id = this.bookIdCounter++;
     const now = new Date();
-    
-    console.log("😊 insertBook 데이터 확인:", JSON.stringify(insertBook, null, 2));
-    
-    // publishedDate 관련 버그 해결 - string, Date, null 모두 처리 
-    let publishedDate = null;
-    if (insertBook.publishedDate) {
-      try {
-        publishedDate = insertBook.publishedDate instanceof Date 
-          ? insertBook.publishedDate 
-          : new Date(insertBook.publishedDate as any);
-      } catch (e) {
-        console.error("📅 출판일 변환 실패:", e);
-      }
-    }
-    
     const book: Book = { 
       id,
       title: insertBook.title,
@@ -103,12 +88,8 @@ export class MemStorage implements IStorage {
       completedDate: insertBook.completedDate || null,
       progress: insertBook.progress || null,
       notes: insertBook.notes || null,
-      publishedDate: publishedDate,
-      publisher: insertBook.publisher || null,
       createdAt: now
     };
-    
-    console.log("📚 최종 책 데이터:", JSON.stringify(book, null, 2));
     this.books.set(id, book);
     return book;
   }
@@ -128,8 +109,6 @@ export class MemStorage implements IStorage {
       completedDate: update.completedDate !== undefined ? new Date(update.completedDate) : book.completedDate,
       progress: update.progress !== undefined ? update.progress : book.progress,
       notes: update.notes !== undefined ? update.notes : book.notes,
-      publishedDate: book.publishedDate, // 기존 publishedDate 유지
-      publisher: book.publisher, // 기존 publisher 유지
       createdAt: book.createdAt
     };
 

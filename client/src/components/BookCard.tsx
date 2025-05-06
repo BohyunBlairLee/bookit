@@ -81,9 +81,7 @@ export default function BookCard({ book, isSearchResult = false }: BookCardProps
         author: book.author,
         coverUrl: book.coverUrl,
         userId: 1,
-        status: status as "want" | "reading" | "completed",
-        publisher: book.publisher || "",
-        publishedDate: book.publishedDate ? new Date(book.publishedDate) : undefined
+        status,
       });
     }
   };
@@ -95,15 +93,14 @@ export default function BookCard({ book, isSearchResult = false }: BookCardProps
     if (!isSearchResult && 'id' in book && typeof book.id === 'number') {
       const updateData = {
         id: book.id,
-        status: value as "want" | "reading" | "completed",
+        status: value,
       };
       
       // 완독 상태로 변경할 때는 필수 필드 추가
       if (value === 'completed') {
         const typedBook = book as Book;
         updateBookMutation.mutate({
-          id: updateData.id,
-          status: 'completed',
+          ...updateData,
           rating: typedBook.rating || 0,
           completedDate: new Date().toISOString()
         });
@@ -268,7 +265,7 @@ export default function BookCard({ book, isSearchResult = false }: BookCardProps
           className="w-full mt-2 py-5 text-sm text-secondary border-secondary hover:bg-secondary/10"
           onClick={(e) => {
             e.stopPropagation();
-            if (!isSearchResult && 'id' in book && typeof book.id === 'number') {
+            if (!isSearchResult && 'id' in book) {
               updateBookMutation.mutate({
                 id: book.id,
                 status: ReadingStatus.READING,
