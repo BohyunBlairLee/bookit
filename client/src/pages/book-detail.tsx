@@ -20,6 +20,7 @@ export default function BookDetail({ id }: BookDetailProps) {
   const [isAddingNote, setIsAddingNote] = useState(false);
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
   const [showNoteTypeModal, setShowNoteTypeModal] = useState(false);
+  const [showCameraOptions, setShowCameraOptions] = useState(false);
   const [activeNoteType, setActiveNoteType] = useState<'quote' | 'thought' | 'combined' | null>(null);
   
   const { data: book, isLoading: isLoadingBook } = useQuery<Book>({
@@ -402,9 +403,45 @@ export default function BookDetail({ id }: BookDetailProps) {
                       autoFocus={activeNoteType === 'quote'}
                     />
                     <div className="flex justify-end">
-                      <button className="text-purple-600">
+                      <button 
+                        className="text-purple-600"
+                        onClick={() => setShowCameraOptions(true)}
+                      >
                         <Camera size={20} />
                       </button>
+                      
+                      {/* 카메라 옵션 모달 */}
+                      {showCameraOptions && (
+                        <>
+                          <div className="fixed inset-0 bg-black bg-opacity-50 z-40" onClick={() => setShowCameraOptions(false)}></div>
+                          <div className="absolute right-0 top-10 bg-white shadow-lg rounded-lg py-1 z-50 w-48">
+                            <button 
+                              className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100"
+                              onClick={() => {
+                                toast({ 
+                                  title: "카메라 기능", 
+                                  description: "사진에서 추출 기능은 현재 개발 중입니다." 
+                                });
+                                setShowCameraOptions(false);
+                              }}
+                            >
+                              사진에서 추출
+                            </button>
+                            <button 
+                              className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100"
+                              onClick={() => {
+                                toast({ 
+                                  title: "카메라 기능", 
+                                  description: "카메라롤에서 추출 기능은 현재 개발 중입니다." 
+                                });
+                                setShowCameraOptions(false);
+                              }}
+                            >
+                              카메라롤에서 추출
+                            </button>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 </>

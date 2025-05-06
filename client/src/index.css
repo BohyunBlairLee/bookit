@@ -352,6 +352,20 @@ html, body {
   z-index: 50;
 }
 
+/* 카메라 버튼 드롭다운 */
+.camera-options {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 8px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  width: 180px;
+  z-index: 20;
+  overflow: hidden;
+}
+
 .note-type-option {
   padding: 14px 16px;
   width: 100%;
