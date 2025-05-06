@@ -127,7 +127,7 @@ export default function BookDetail({ id }: BookDetailProps) {
     
     // 완독 상태로 변경 시 별점과 완독일 추가
     if (status === ReadingStatus.COMPLETED) {
-      updateData.completedDate = completedDate.toISOString();
+      updateData.completedDate = completedDate;
       updateData.rating = book.rating || 0;
     }
     
@@ -274,14 +274,15 @@ export default function BookDetail({ id }: BookDetailProps) {
   
   return (
     <div className="page-container pb-20">
-      <div className="mobile-header">
+      {/* 헤더 - 뒤로가기 + 상태 버튼 */}
+      <div className="flex items-center justify-between mb-6">
         <Link to="/" className="text-muted-foreground">
           <ChevronLeft size={24} />
         </Link>
-        <div className="flex-1"></div>
+        
         <div className="relative">
           <button 
-            className="bg-primary text-white rounded-full px-3 py-1 text-sm flex items-center"
+            className="bg-primary text-white rounded-full px-4 py-1.5 text-sm flex items-center"
             onClick={() => setShowStatusDropdown(!showStatusDropdown)}
           >
             {book.status === ReadingStatus.READING ? '읽는 중' : 
@@ -323,24 +324,26 @@ export default function BookDetail({ id }: BookDetailProps) {
         </div>
       </div>
       
-      <div className="flex flex-col items-center mt-6">
+      {/* 책 표지 및 상세 정보 */}
+      <div className="flex flex-col items-center">
         <img 
           src={book.coverUrl} 
           alt={book.title} 
-          className="w-36 h-48 object-cover rounded-lg shadow-md"
+          className="w-32 h-48 object-cover rounded-lg shadow-md"
         />
-        <h2 className="text-xl font-bold mt-4">{book.title}</h2>
-        <p className="text-muted-foreground mt-1">{book.author}</p>
-        <p className="text-sm text-muted-foreground mt-1">
-          {book.completedDate ? new Date(book.completedDate).getFullYear() + '년 ' + (new Date(book.completedDate).getMonth() + 1) + '월' : 
-            new Date(book.createdAt).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long' })}
+        <h2 className="text-xl font-bold mt-5 text-center">{book.title}</h2>
+        <p className="text-gray-600 mt-2 text-center">{book.author}</p>
+        <p className="text-sm text-gray-500 mt-1 mb-3 text-center">
+          {book.publisher} | {book.publishedDate 
+            ? new Date(book.publishedDate).getFullYear() + '년 ' + (new Date(book.publishedDate).getMonth() + 1) + '월' 
+            : '출판일 정보 없음'}
         </p>
       </div>
       
       {book.status === ReadingStatus.COMPLETED && (
-        <div className="mt-6 space-y-4">
+        <div className="mt-6 space-y-5 bg-gray-50 rounded-xl p-5">
           <div className="flex flex-col items-center">
-            <p className="text-sm font-medium mb-2">평점</p>
+            <p className="text-sm font-medium mb-2 text-gray-600">평점</p>
             <HalfStarRating
               rating={book.rating || 0}
               max={5}
@@ -350,32 +353,34 @@ export default function BookDetail({ id }: BookDetailProps) {
             />
           </div>
           
-          <div className="flex items-center justify-between bg-muted rounded-lg p-4">
+          <div className="flex items-center justify-between pt-3 border-t border-gray-200">
             <div className="flex items-center">
-              <Calendar size={16} className="mr-2 text-muted-foreground" />
-              <span className="text-sm">완독일</span>
+              <Calendar size={16} className="mr-2 text-gray-500" />
+              <span className="text-sm text-gray-600">완독일</span>
             </div>
             <input
               type="date"
               value={completedDate}
               onChange={handleCompletedDateChange}
-              className="bg-transparent border border-input rounded text-sm px-2 py-1"
+              className="bg-white border border-gray-200 rounded text-sm px-2 py-1 text-gray-700"
             />
           </div>
         </div>
       )}
       
       <div className="mt-8">
-        <div className="flex items-center mb-6">
-          <span role="img" aria-label="메모장" className="mr-2">📝</span>
-          <h3 className="text-lg font-bold">독서 노트</h3>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center">
+            <span role="img" aria-label="메모장" className="mr-2">📝</span>
+            <h3 className="text-lg font-bold">독서 노트</h3>
+          </div>
         </div>
         
         <button
-          className="add-note-button"
+          className="w-full flex items-center justify-center bg-primary text-white py-3 rounded-full font-medium text-sm mb-6"
           onClick={() => setShowNoteTypeModal(true)}
         >
-          <PencilLine size={18} /> 독서 노트 +
+          <PencilLine size={16} className="mr-1.5" /> 독서 노트 +
         </button>
         
         {/* 노트 타입 선택 모달 */}
@@ -535,21 +540,25 @@ export default function BookDetail({ id }: BookDetailProps) {
           </div>
         ) : (
           <div className="space-y-4 mt-4">
+            <div className="flex items-center mb-3">
+              <span role="img" aria-label="메모장" className="mr-2">📔</span>
+              <p className="text-sm font-medium">독서 노트</p>
+            </div>
             {notes.map((note) => (
-              <div key={note.id} className="note-item">
-                <div className="flex justify-between mb-2">
-                  <div className="w-2 h-full"></div>
-                  <p className="note-item-date">
+              <div key={note.id} className="bg-gray-100 rounded-lg p-4 mb-3 relative">
+                <div className="flex justify-between">
+                  <div className="w-1 h-full bg-primary absolute left-0 top-0 bottom-0 rounded-l-lg"></div>
+                  <p className="text-xs text-gray-500 text-right absolute right-4 top-4">
                     {new Date(note.createdAt).toLocaleDateString('ko-KR')}
                   </p>
                 </div>
-                <p className="mt-2 whitespace-pre-wrap text-gray-800">{note.content}</p>
+                <p className="mt-6 whitespace-pre-wrap text-gray-800">{note.content}</p>
                 <div className="flex justify-end mt-2">
                   <button 
-                    className="text-red-400 hover:text-red-600" 
+                    className="text-gray-400 hover:text-red-500" 
                     onClick={() => handleDeleteNote(note.id)}
                   >
-                    <Trash2 size={16} />
+                    <Trash2 size={14} />
                   </button>
                 </div>
               </div>
