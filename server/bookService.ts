@@ -35,14 +35,30 @@ export async function searchBooks(query: string) {
   }
 
   try {
-    // 검색어가 한글이 아니면 '소설'로 기본 검색 (테스트용)
-    const searchQuery = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(query) ? query : `${query} 소설`;
+    console.log('⭐ 원본 검색어:', query);
     
-    const response = await fetch(`${KAKAO_API_URL}?query=${encodeURIComponent(searchQuery)}&size=10`, {
+    // 검색어가 영어가 아니면 그대로 사용, 영어이면 '소설' 키워드 추가
+    let searchQuery = query;
+    if (/^[a-zA-Z0-9\s]+$/.test(query)) {
+      searchQuery = `${query} 소설`;
+    }
+    
+    console.log('⭐ 최종 검색어:', searchQuery);
+    console.log('⭐ 카카오 API 키:', KAKAO_API_KEY.slice(0, 4) + '...');
+    
+    const encodedQuery = encodeURIComponent(searchQuery);
+    console.log('⭐ 인코딩된 검색어:', encodedQuery);
+    
+    const url = `${KAKAO_API_URL}?query=${encodedQuery}&size=10`;
+    console.log('⭐ 요청 URL:', url);
+    
+    const response = await fetch(url, {
       headers: {
         'Authorization': `KakaoAK ${KAKAO_API_KEY}`
       }
     });
+    
+    console.log('⭐ 카카오 API 응답 상태:', response.status, response.statusText);
 
     if (!response.ok) {
       console.error(`API Error: ${response.status} ${response.statusText}`);
