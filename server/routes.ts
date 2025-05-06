@@ -101,18 +101,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Add a book to the user's collection
   app.post("/api/books", async (req: Request, res: Response) => {
     try {
+      console.log("Received book data:", JSON.stringify(req.body, null, 2));
+      
       // Validate request body
       const validatedData = insertBookSchema.parse({
         ...req.body,
         userId: MOCK_USER_ID
       });
+      console.log("Validated book data:", JSON.stringify(validatedData, null, 2));
 
       const newBook = await dbStorage.addBook(validatedData);
       res.status(201).json(newBook);
     } catch (error) {
       if (error instanceof z.ZodError) {
+        console.error("Zod validation error:", JSON.stringify(error.errors, null, 2));
         return res.status(400).json({ message: "Invalid book data", errors: error.errors });
       }
+      console.error("Server error:", error);
       res.status(500).json({ message: "Failed to add book", error: String(error) });
     }
   });
