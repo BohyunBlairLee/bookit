@@ -9,16 +9,10 @@ import { ImageAnnotatorClient } from '@google-cloud/vision';
  */
 export async function extractTextFromImage(imageBuffer: Buffer): Promise<string> {
   try {
-    // 임시 기능 사용 여부 확인 - 개발 환경에서만 사용해야 함
-    const useFallback = true;
+    // 실제 Google Cloud Vision API 사용
+    console.log("Using Google Cloud Vision API for text extraction");
     
-    if (useFallback) {
-      console.log("Using fallback text extraction (Google Cloud Vision API not configured)");
-      // 테스트용 텍스트 반환 - 실제 환경에서는 이 기능을 제거하고 실제 API를 사용해야 합니다
-      return "이것은 책에서 발췌한 문장입니다. 텍스트 추출 기능이 결제 계정 활성화 필요로 인해 현재 테스트 모드로 작동합니다.";
-    }
-    
-    // 실제 API 사용 코드 (사용하지 않음)
+    // 실제 API 사용 코드
     const client = new ImageAnnotatorClient({
       apiKey: process.env.GOOGLE_CLOUD_VISION_API_KEY,
     });
