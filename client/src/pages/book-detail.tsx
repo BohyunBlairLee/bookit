@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Book, ReadingNote, ReadingStatus, UpdateBookStatus } from "@shared/schema";
 import { ChevronLeft, Calendar, Plus, PencilLine, Trash2, ChevronDown, Camera } from "lucide-react";
@@ -14,6 +14,7 @@ interface BookDetailProps {
 export default function BookDetail({ id }: BookDetailProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [completedDate, setCompletedDate] = useState<string>("");
   const [newNote, setNewNote] = useState<string>("");
   const [newQuote, setNewQuote] = useState<string>("");
@@ -22,6 +23,7 @@ export default function BookDetail({ id }: BookDetailProps) {
   const [showNoteTypeModal, setShowNoteTypeModal] = useState(false);
   const [showCameraOptions, setShowCameraOptions] = useState(false);
   const [activeNoteType, setActiveNoteType] = useState<'quote' | 'thought' | 'combined' | null>(null);
+  const [isProcessingImage, setIsProcessingImage] = useState(false);
   
   const { data: book, isLoading: isLoadingBook } = useQuery<Book>({
     queryKey: ["/api/books", id],
@@ -175,6 +177,61 @@ export default function BookDetail({ id }: BookDetailProps) {
   const handleDeleteNote = (noteId: number) => {
     if (confirm("정말로 이 독서 노트를 삭제하시겠습니까?")) {
       removeNoteMutation.mutate(noteId);
+    }
+  };
+  
+  // 이미지 파일 처리 함수
+  const handleImageUpload = async (file: File) => {
+    try {
+      setIsProcessingImage(true);
+      
+      // FormData 객체 생성 및 이미지 파일 추가
+      const formData = new FormData();
+      formData.append("image", file);
+      
+      // 서버에 이미지 전송하여 텍스트 추출
+      const response = await fetch("/api/extract-text", {
+        method: "POST",
+        body: formData,
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "이미지 처리 중 오류가 발생했습니다");
+      }
+      
+      const data = await response.json();
+      
+      // 추출된 텍스트를 인용구 필드에 설정
+      setNewQuote(data.processedText);
+      
+      toast({ 
+        title: "텍스트 추출 완료", 
+        description: "이미지에서 텍스트를 성공적으로 추출했습니다." 
+      });
+    } catch (error) {
+      console.error("이미지 처리 오류:", error);
+      toast({ 
+        variant: "destructive", 
+        title: "텍스트 추출 실패", 
+        description: error instanceof Error ? error.message : "이미지 처리 중 오류가 발생했습니다" 
+      });
+    } finally {
+      setIsProcessingImage(false);
+      setShowCameraOptions(false);
+    }
+  };
+  
+  // 파일 선택 핸들러
+  const handleFileSelect = () => {
+    fileInputRef.current?.click();
+  };
+  
+  // 파일 입력 변경 핸들러
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      handleImageUpload(file);
     }
   };
   

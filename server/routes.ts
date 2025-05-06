@@ -204,7 +204,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid note ID" });
       }
       
-      const success = await storage.removeReadingNote(id);
+      const success = await dbStorage.removeReadingNote(id);
       if (!success) {
         return res.status(404).json({ message: "Reading note not found" });
       }
@@ -212,6 +212,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ message: "Failed to remove reading note", error: String(error) });
+    }
+  });
+
+  // 이미지에서 텍스트 추출 API
+  app.post("/api/extract-text", upload.single('image'), async (req: Request, res: Response) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "이미지 파일이 필요합니다" });
+      }
+
+      console.log("이미지 파일 수신: ", req.file.originalname, req.file.size, "bytes");
+      
+      // 이미지에서 텍스트 추출
+      const extractedText = await extractTextFromImage(req.file.buffer);
+      
+      // 추출된 텍스트 가공
+      const processedText = processExtractedText(extractedText);
+      
+      res.json({ 
+        originalText: extractedText,
+        processedText: processedText
+      });
+    } catch (error) {
+      console.error("텍스트 추출 오류:", error);
+      res.status(500).json({ message: "텍스트 추출 중 오류가 발생했습니다", error: String(error) });
     }
   });
 
