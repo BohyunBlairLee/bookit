@@ -16,7 +16,11 @@ export default function BookDetail({ id }: BookDetailProps) {
   const queryClient = useQueryClient();
   const [completedDate, setCompletedDate] = useState<string>("");
   const [newNote, setNewNote] = useState<string>("");
+  const [newQuote, setNewQuote] = useState<string>("");
   const [isAddingNote, setIsAddingNote] = useState(false);
+  const [showStatusDropdown, setShowStatusDropdown] = useState(false);
+  const [showNoteTypeModal, setShowNoteTypeModal] = useState(false);
+  const [activeNoteType, setActiveNoteType] = useState<'quote' | 'thought' | 'combined' | null>(null);
   
   const { data: book, isLoading: isLoadingBook } = useQuery<Book>({
     queryKey: ["/api/books", id],
@@ -147,8 +151,24 @@ export default function BookDetail({ id }: BookDetailProps) {
   };
   
   const handleAddNote = () => {
-    if (!newNote.trim()) return;
-    addNoteMutation.mutate(newNote);
+    if (activeNoteType === 'thought' && !newNote.trim()) return;
+    if (activeNoteType === 'quote' && !newQuote.trim()) return;
+    if (activeNoteType === 'combined' && (!newQuote.trim() || !newNote.trim())) return;
+    
+    let content = '';
+    
+    if (activeNoteType === 'quote') {
+      content = `"${newQuote.trim()}"`;
+    } else if (activeNoteType === 'thought') {
+      content = newNote.trim();
+    } else if (activeNoteType === 'combined') {
+      content = `"${newQuote.trim()}"\n\n${newNote.trim()}`;
+    } else {
+      // 기본값 - 이전 방식과 호환
+      content = newNote.trim();
+    }
+    
+    addNoteMutation.mutate(content);
   };
   
   const handleDeleteNote = (noteId: number) => {
@@ -199,9 +219,46 @@ export default function BookDetail({ id }: BookDetailProps) {
         </Link>
         <div className="flex-1"></div>
         <div className="relative">
-          <button className="bg-primary text-white rounded-full px-3 py-1 text-sm flex items-center">
-            읽는 중 <ChevronDown size={16} className="ml-1" />
+          <button 
+            className="bg-primary text-white rounded-full px-3 py-1 text-sm flex items-center"
+            onClick={() => setShowStatusDropdown(!showStatusDropdown)}
+          >
+            {book.status === ReadingStatus.READING ? '읽는 중' : 
+             book.status === ReadingStatus.WANT ? '읽을 예정' : '완독!'} 
+            <ChevronDown size={16} className="ml-1" />
           </button>
+          
+          {showStatusDropdown && (
+            <div className="absolute right-0 mt-1 w-32 bg-white shadow-lg rounded-lg py-1 z-10">
+              <button 
+                className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-100 ${book.status === ReadingStatus.READING ? 'font-semibold text-primary' : ''}`}
+                onClick={() => {
+                  handleStatusChange(ReadingStatus.READING);
+                  setShowStatusDropdown(false);
+                }}
+              >
+                읽는 중
+              </button>
+              <button 
+                className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-100 ${book.status === ReadingStatus.WANT ? 'font-semibold text-primary' : ''}`}
+                onClick={() => {
+                  handleStatusChange(ReadingStatus.WANT);
+                  setShowStatusDropdown(false);
+                }}
+              >
+                읽을 예정
+              </button>
+              <button 
+                className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-100 ${book.status === ReadingStatus.COMPLETED ? 'font-semibold text-primary' : ''}`}
+                onClick={() => {
+                  handleStatusChange(ReadingStatus.COMPLETED);
+                  setShowStatusDropdown(false);
+                }}
+              >
+                완독!
+              </button>
+            </div>
+          )}
         </div>
       </div>
       
@@ -255,35 +312,118 @@ export default function BookDetail({ id }: BookDetailProps) {
         
         <button
           className="add-note-button"
-          onClick={() => setIsAddingNote(true)}
+          onClick={() => setShowNoteTypeModal(true)}
         >
           <PencilLine size={18} /> 독서 노트 +
         </button>
         
-        {isAddingNote && (
-          <div className="bg-white rounded-lg p-4 mb-4 mt-4 shadow-md">
-            <textarea
-              className="textarea-field"
-              placeholder="독서 중 떠오른 생각을 기록해보세요..."
-              value={newNote}
-              onChange={(e) => setNewNote(e.target.value)}
-              rows={4}
-              autoFocus
-            />
-            <div className="flex justify-end space-x-2 mt-2">
-              <button
-                className="px-3 py-1 text-sm rounded-md bg-gray-300 text-gray-800"
-                onClick={() => setIsAddingNote(false)}
+        {/* 노트 타입 선택 모달 */}
+        {showNoteTypeModal && (
+          <>
+            <div className="fixed inset-0 bg-black bg-opacity-50 z-40" onClick={() => setShowNoteTypeModal(false)}></div>
+            <div className="note-type-modal">
+              <button 
+                className="note-type-option" 
+                onClick={() => {
+                  setActiveNoteType('quote');
+                  setShowNoteTypeModal(false);
+                  setIsAddingNote(true);
+                }}
               >
-                취소
+                책 속 문장 수집하기
               </button>
-              <button
-                className="px-3 py-1 text-sm rounded-md bg-primary text-white"
-                onClick={handleAddNote}
-                disabled={!newNote.trim() || addNoteMutation.isPending}
+              <button 
+                className="note-type-option" 
+                onClick={() => {
+                  setActiveNoteType('thought');
+                  setShowNoteTypeModal(false);
+                  setIsAddingNote(true);
+                }}
               >
-                {addNoteMutation.isPending ? '저장 중...' : '저장하기'}
+                생각 메모하기
               </button>
+              <button 
+                className="note-type-option" 
+                onClick={() => {
+                  setActiveNoteType('combined');
+                  setShowNoteTypeModal(false);
+                  setIsAddingNote(true);
+                }}
+              >
+                문장과 메모 함께 기록하기
+              </button>
+            </div>
+          </>
+        )}
+        
+        {/* 노트 입력 화면 */}
+        {isAddingNote && activeNoteType && (
+          <div className="note-input-screen">
+            <div className="note-input-header">
+              <button onClick={() => {
+                setIsAddingNote(false);
+                setActiveNoteType(null);
+                setNewNote('');
+                setNewQuote('');
+              }}>
+                <ChevronLeft size={24} />
+              </button>
+              <h2>
+                {activeNoteType === 'quote' ? '책 속 문장 수집하기' : 
+                 activeNoteType === 'thought' ? '생각 메모하기' : '문장과 메모 함께 기록하기'}
+              </h2>
+              <button 
+                className="text-primary"
+                onClick={() => {
+                  if (addNoteMutation.isPending) return;
+                  
+                  if (activeNoteType === 'quote' && !newQuote.trim()) return;
+                  if (activeNoteType === 'thought' && !newNote.trim()) return;
+                  if (activeNoteType === 'combined' && (!newQuote.trim() || !newNote.trim())) return;
+                  
+                  handleAddNote();
+                }}
+              >
+                저장
+              </button>
+            </div>
+            
+            <div className="note-input-content">
+              {(activeNoteType === 'quote' || activeNoteType === 'combined') && (
+                <>
+                  {activeNoteType === 'quote' && <h3 className="text-lg font-bold mb-2">책 속 문장</h3>}
+                  <div className="bg-purple-50 border-l-4 border-purple-500 p-4 rounded-lg mb-4">
+                    <textarea
+                      className="w-full bg-transparent border-none resize-none focus:ring-0 p-0"
+                      placeholder="인상깊었던 책 속 문장을 입력하세요..."
+                      value={newQuote}
+                      onChange={(e) => setNewQuote(e.target.value)}
+                      rows={4}
+                      autoFocus={activeNoteType === 'quote'}
+                    />
+                    <div className="flex justify-end">
+                      <button className="text-purple-600">
+                        <Camera size={20} />
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+              
+              {(activeNoteType === 'thought' || activeNoteType === 'combined') && (
+                <>
+                  {activeNoteType === 'thought' && <h3 className="text-lg font-bold mb-2">나의 생각</h3>}
+                  {activeNoteType === 'combined' && <h3 className="text-lg font-bold mb-2">나의 생각</h3>}
+                  <textarea
+                    className="w-full bg-gray-50 border border-gray-200 rounded-lg p-4 resize-none min-h-[150px]"
+                    placeholder="독서 중 떠오른 생각을 기록해보세요..."
+                    value={newNote}
+                    onChange={(e) => setNewNote(e.target.value)}
+                    rows={6}
+                    autoFocus={activeNoteType === 'thought'}
+                  />
+                </>
+              )}
             </div>
           </div>
         )}
