@@ -162,6 +162,19 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
         </button>
       </div>
       
+      {/* 상태 라벨 표시 */}
+      <div className="mb-4">
+        <p className={`font-semibold text-lg text-center ${
+          status === ReadingStatus.READING ? 'text-primary' : 
+          status === ReadingStatus.WANT ? 'text-primary' : 
+          status === ReadingStatus.COMPLETED ? 'text-primary' : ''
+        }`}>
+          {status === ReadingStatus.READING ? '읽는 중' : 
+           status === ReadingStatus.WANT ? '읽을 예정' : 
+           status === ReadingStatus.COMPLETED ? '완독!' : ''}
+        </p>
+      </div>
+      
       {/* 완독 상태일 때만 표시될 별점과 날짜 선택 */}
       {status === ReadingStatus.COMPLETED && (
         <>

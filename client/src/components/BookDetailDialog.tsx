@@ -126,25 +126,38 @@ export default function BookDetailDialog({ book, open, onOpenChange }: BookDetai
                 <Button 
                   variant={status === ReadingStatus.WANT ? "secondary" : "outline"}
                   onClick={() => setStatus(ReadingStatus.WANT)}
-                  className={status === ReadingStatus.WANT ? "text-white" : ""}
+                  className={status === ReadingStatus.WANT ? "text-white font-bold shadow-md" : ""}
                 >
                   읽을 예정
                 </Button>
                 <Button 
                   variant={status === ReadingStatus.READING ? "secondary" : "outline"}
                   onClick={() => setStatus(ReadingStatus.READING)}
-                  className={status === ReadingStatus.READING ? "text-white" : ""}
+                  className={status === ReadingStatus.READING ? "text-white font-bold shadow-md" : ""}
                 >
                   읽는 중
                 </Button>
                 <Button 
                   variant={status === ReadingStatus.COMPLETED ? "default" : "outline"}
-                  className={status === ReadingStatus.COMPLETED ? "bg-accent hover:bg-accent/90 text-white" : ""}
+                  className={status === ReadingStatus.COMPLETED ? "bg-accent hover:bg-accent/90 text-white font-bold shadow-md" : ""}
                   onClick={() => setStatus(ReadingStatus.COMPLETED)}
                 >
                   완독!
                 </Button>
               </div>
+            </div>
+            
+            {/* 상태 라벨 표시 */}
+            <div className="mb-6">
+              <p className={`font-semibold text-center ${
+                status === ReadingStatus.READING ? 'text-primary' : 
+                status === ReadingStatus.WANT ? 'text-primary' : 
+                status === ReadingStatus.COMPLETED ? 'text-primary' : ''
+              }`}>
+                {status === ReadingStatus.READING ? '읽는 중' : 
+                 status === ReadingStatus.WANT ? '읽을 예정' : 
+                 status === ReadingStatus.COMPLETED ? '완독!' : ''}
+              </p>
             </div>
 
             {status === ReadingStatus.READING && (
