@@ -80,8 +80,11 @@ export default function BookCard({ book, isSearchResult = false }: BookCardProps
         title: book.title,
         author: book.author,
         coverUrl: book.coverUrl,
+        publisher: book.publisher || null,
+        publishedDate: book.publishedDate || null,
         userId: 1,
         status,
+        completedDate: null
       });
     }
   };

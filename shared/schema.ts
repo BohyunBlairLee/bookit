@@ -42,9 +42,16 @@ export const readingNotes = pgTable("reading_notes", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const insertBookSchema = createInsertSchema(books).omit({
+// 기본 삽입 스키마 생성 및 자동 필드 제외
+const baseInsertBookSchema = createInsertSchema(books).omit({
   id: true,
   createdAt: true,
+});
+
+// 날짜 필드를 문자열로 처리하도록 수정된 삽입 스키마
+export const insertBookSchema = baseInsertBookSchema.extend({
+  publishedDate: z.string().nullable().transform(val => val ? new Date(val) : null),
+  completedDate: z.string().nullable().transform(val => val ? new Date(val) : null),
 });
 
 export const insertReadingNoteSchema = createInsertSchema(readingNotes).omit({
@@ -81,7 +88,7 @@ export const updateBookStatusSchema = z.object({
   id: z.number(),
   status: z.enum([ReadingStatus.WANT, ReadingStatus.READING, ReadingStatus.COMPLETED]),
   rating: z.number().min(0).max(5).step(0.5).optional(),
-  completedDate: z.string().optional(),
+  completedDate: z.string().optional().transform(val => val ? new Date(val) : undefined),
   progress: z.number().min(0).max(100).optional(),
   notes: z.string().optional(),
 });
