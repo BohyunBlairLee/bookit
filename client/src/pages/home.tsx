@@ -209,7 +209,7 @@ export default function Home() {
                   <span className="text-orange-500 mr-1">🔥</span>
                   <h2 className="text-lg font-bold">읽는 중</h2>
                 </div>
-                <div className="book-counter ml-auto">
+                <div className="book-counter">
                   {currentIndex + 1}권 / {readingBooks.length}권
                 </div>
               </div>

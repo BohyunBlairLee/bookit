@@ -116,19 +116,17 @@ html, body {
 }
 
 .reading-book-cover {
-  width: 80%;
-  max-width: 320px;
+  width: 50%;
+  max-width: 180px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .book-counter {
-  position: absolute;
-  top: 10px;
-  right: 10px;
   font-size: 0.9rem;
   color: #666;
+  margin-left: auto;
 }
 
 .carousel-arrows {
@@ -141,24 +139,24 @@ html, body {
 }
 
 .book-title {
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   font-weight: 600;
   text-align: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem;
 }
 
 .book-author {
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: #666;
   text-align: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.2rem;
 }
 
 .book-info {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: #888;
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.8rem;
 }
 
 .continue-reading-button {
@@ -166,13 +164,13 @@ html, body {
   color: white;
   border: none;
   border-radius: 100px;
-  padding: 1rem 0;
-  font-size: 1rem;
+  padding: 0.8rem 0;
+  font-size: 0.9rem;
   font-weight: 500;
   width: 80%;
-  max-width: 320px;
+  max-width: 240px;
   cursor: pointer;
-  margin-top: 1rem;
+  margin-top: 0.3rem;
   transition: background-color 0.2s ease;
 }
 

@@ -23,6 +23,8 @@ export const books = pgTable("books", {
   title: text("title").notNull(),
   author: text("author").notNull(),
   coverUrl: text("cover_url").notNull(),
+  publisher: text("publisher"),
+  publishedDate: timestamp("published_date"),
   userId: integer("user_id").notNull(),
   status: text("status").notNull().default("want"), // 'want', 'reading', 'completed'
   rating: real("rating"), // 0.5-5.0 rating for completed books
