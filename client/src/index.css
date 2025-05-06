@@ -316,6 +316,53 @@ html, body {
   text-align: right;
 }
 
+/* 독서 노트 추가 버튼 */
+.add-note-button {
+  background-color: hsl(var(--primary));
+  color: white;
+  border: none;
+  border-radius: 100px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  width: 100%;
+  cursor: pointer;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-note-button svg {
+  margin-right: 0.5rem;
+}
+
+/* 독서 노트 아이콘 */
+.note-icon {
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
+  color: #9ca3af;
+}
+
+/* 독서 노트 항목 */
+.note-item {
+  background-color: #f9fafb;
+  border-radius: 1rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  position: relative;
+  border-left: 4px solid hsl(var(--primary));
+}
+
+.note-item-date {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  text-align: right;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
 /* 별점 시스템 스타일 */
 .star-rating {
   display: inline-flex;

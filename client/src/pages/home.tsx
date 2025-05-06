@@ -229,9 +229,11 @@ export default function Home() {
                           <p className="book-info">
                             {new Date(book.createdAt).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })} 추가
                           </p>
-                          <button className="continue-reading-button">
-                            독서 기록하기
-                          </button>
+                          <Link to={`/book/${book.id}`}>
+                            <button className="continue-reading-button">
+                              독서 기록하기
+                            </button>
+                          </Link>
                         </div>
                       </div>
                     ))}
