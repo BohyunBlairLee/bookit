@@ -81,7 +81,9 @@ export default function BookCard({ book, isSearchResult = false }: BookCardProps
         author: book.author,
         coverUrl: book.coverUrl,
         userId: 1,
-        status,
+        status: status as "want" | "reading" | "completed",
+        publisher: book.publisher || "",
+        publishedDate: book.publishedDate ? new Date(book.publishedDate) : undefined
       });
     }
   };
