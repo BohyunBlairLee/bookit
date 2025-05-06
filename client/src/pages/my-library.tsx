@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Book, ReadingStatus } from "@shared/schema";
 import { useState } from "react";
-import BookCard from "@/components/BookCard";
+import BookThumbnail from "@/components/BookThumbnail";
 import { Plus } from "lucide-react";
 import { Link } from "wouter";
 
@@ -81,7 +81,7 @@ export default function MyLibrary() {
       ) : (
         <div className="book-grid mt-4">
           {booksToShow.map((book: Book) => (
-            <BookCard 
+            <BookThumbnail 
               key={book.id} 
               book={book}
             />

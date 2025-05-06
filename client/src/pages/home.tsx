@@ -227,7 +227,7 @@ export default function Home() {
                           <h3 className="book-title">{book.title}</h3>
                           <p className="book-author">{book.author}</p>
                           <p className="book-info">
-                            {book.publisher} | {book.publishedDate ? new Date(book.publishedDate).getFullYear() + '년 ' + (new Date(book.publishedDate).getMonth() + 1) + '월' : ''}
+                            {new Date(book.createdAt).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })} 추가
                           </p>
                           <button className="continue-reading-button">
                             독서 기록하기
