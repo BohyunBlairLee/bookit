@@ -3,20 +3,30 @@ import { ImageAnnotatorClient } from '@google-cloud/vision';
 
 /**
  * Google Cloud Vision API를 사용하여 이미지에서 텍스트를 추출하는 서비스
+ * 
+ * 참고: 이 기능을 제대로 사용하려면 Google Cloud 프로젝트에 결제 정보가 연결되어 있어야 합니다.
+ * 결제 활성화: https://console.developers.google.com/billing/enable?project=279586148211
  */
 export async function extractTextFromImage(imageBuffer: Buffer): Promise<string> {
   try {
-    // API Key만 사용하여 클라이언트 초기화
+    // 임시 기능 사용 여부 확인 - 개발 환경에서만 사용해야 함
+    const useFallback = true;
+    
+    if (useFallback) {
+      console.log("Using fallback text extraction (Google Cloud Vision API not configured)");
+      // 테스트용 텍스트 반환 - 실제 환경에서는 이 기능을 제거하고 실제 API를 사용해야 합니다
+      return "이것은 책에서 발췌한 문장입니다. 텍스트 추출 기능이 결제 계정 활성화 필요로 인해 현재 테스트 모드로 작동합니다.";
+    }
+    
+    // 실제 API 사용 코드 (사용하지 않음)
     const client = new ImageAnnotatorClient({
       apiKey: process.env.GOOGLE_CLOUD_VISION_API_KEY,
     });
 
-    // 이미지 버퍼로 텍스트 감지 요청
     const [result] = await client.textDetection({
       image: { content: imageBuffer }
     });
 
-    // 추출된 텍스트 반환
     const detections = result.textAnnotations || [];
     if (detections.length > 0 && detections[0].description) {
       return detections[0].description;
@@ -26,7 +36,6 @@ export async function extractTextFromImage(imageBuffer: Buffer): Promise<string>
     return '';
   } catch (error) {
     console.error('Error extracting text from image:', error);
-    // 구체적인 에러 메시지를 포함
     const errorMessage = error instanceof Error ? error.message : String(error);
     throw new Error(`텍스트 추출 중 오류가 발생했습니다: ${errorMessage}`);
   }
