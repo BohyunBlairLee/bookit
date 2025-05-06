@@ -78,7 +78,7 @@ export default function BookDetailDialog({ book, open, onOpenChange }: BookDetai
       id: book.id,
       status: status as (typeof ReadingStatus)[keyof typeof ReadingStatus],
       rating,
-      completedDate: completedDate ? format(completedDate, 'yyyy-MM-dd') : undefined,
+      completedDate: completedDate ? completedDate.toISOString() : undefined,
       progress,
       notes,
     });

@@ -127,7 +127,7 @@ export default function BookDetail({ id }: BookDetailProps) {
     
     // 완독 상태로 변경 시 별점과 완독일 추가
     if (status === ReadingStatus.COMPLETED) {
-      updateData.completedDate = completedDate;
+      updateData.completedDate = completedDate.toISOString();
       updateData.rating = book.rating || 0;
     }
     
@@ -152,7 +152,7 @@ export default function BookDetail({ id }: BookDetailProps) {
     updateStatusMutation.mutate({
       id: book.id,
       status: ReadingStatus.COMPLETED,
-      completedDate: e.target.value,
+      completedDate: new Date(e.target.value).toISOString(),
     });
   };
   
