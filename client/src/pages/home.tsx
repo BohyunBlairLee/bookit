@@ -117,7 +117,7 @@ export default function Home() {
             </div>
           ) : (
             <div className="space-y-4">
-              {searchResults.map((book) => (
+              {searchResults.map((book: BookSearchResult) => (
                 <a
                   key={book.title + book.author}
                   href={`/search/details?title=${encodeURIComponent(book.title)}&author=${encodeURIComponent(book.author)}&coverUrl=${encodeURIComponent(book.coverUrl)}`}
@@ -211,7 +211,7 @@ export default function Home() {
               <div>
                 <h2 className="text-lg font-medium mb-4">검색 결과</h2>
                 <div className="space-y-4">
-                  {searchResults.map((book) => (
+                  {searchResults.map((book: BookSearchResult) => (
                     <a
                       key={book.title + book.author}
                       href={`/search/details?title=${encodeURIComponent(book.title)}&author=${encodeURIComponent(book.author)}&coverUrl=${encodeURIComponent(book.coverUrl)}`}
