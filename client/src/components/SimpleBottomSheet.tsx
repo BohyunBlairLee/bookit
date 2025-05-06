@@ -42,7 +42,13 @@ export default function SimpleBottomSheet({ open, onClose, children, title }: Si
       
       <div 
         className="fixed inset-x-0 bottom-0 z-50 rounded-t-xl bg-white"
-        style={{ animation: 'slideUp 0.3s ease-out forwards', maxHeight: '80vh', display: 'flex', flexDirection: 'column', paddingBottom: 'env(safe-area-inset-bottom, 16px)' }}
+        style={{ 
+          animation: 'slideUp 0.3s ease-out forwards', 
+          maxHeight: '90vh',
+          display: 'flex', 
+          flexDirection: 'column', 
+          paddingBottom: 'env(safe-area-inset-bottom, 16px)' 
+        }}
       >
         <div className="px-4 pt-3 pb-2">
           <div className="bottom-sheet-handle mx-auto"></div>
@@ -60,7 +66,8 @@ export default function SimpleBottomSheet({ open, onClose, children, title }: Si
           )}
         </div>
         
-        <div className="px-4 pb-4 flex-1 overflow-auto" ref={sheetRef}>
+        <div className="px-4 pb-16 flex-1" ref={sheetRef}
+          style={{ maxHeight: '70vh', overflowY: 'auto', paddingBottom: '85px' }}>
           {children}
         </div>
       </div>

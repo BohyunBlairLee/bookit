@@ -305,12 +305,16 @@ html, body {
 /* 바텀시트 읽기 상태 버튼 */
 .status-buttons button {
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 25px; /* 더 둥글게 */
   font-weight: 500;
   border: none;
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 0.9rem;
+}
+
+.status-buttons button:active {
+  transform: scale(0.95);
 }
 
 .star-rating {

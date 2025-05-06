@@ -143,19 +143,19 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
       {/* 상태 선택 버튼 */}
       <div className="status-buttons grid grid-cols-3 gap-3 my-4">
         <button 
-          className={`status-button rounded-full py-3 ${status === ReadingStatus.READING ? 'bg-primary text-white' : 'bg-gray-100'}`}
+          className={`status-button rounded-full py-3 ${status === ReadingStatus.READING ? 'bg-primary text-white font-bold shadow-md' : 'bg-gray-100'}`}
           onClick={() => handleStatusChange(ReadingStatus.READING)}
         >
           읽는 중
         </button>
         <button 
-          className={`status-button rounded-full py-3 ${status === ReadingStatus.WANT ? 'bg-primary text-white' : 'bg-gray-100'}`}
+          className={`status-button rounded-full py-3 ${status === ReadingStatus.WANT ? 'bg-primary text-white font-bold shadow-md' : 'bg-gray-100'}`}
           onClick={() => handleStatusChange(ReadingStatus.WANT)}
         >
           읽을 예정
         </button>
         <button 
-          className={`status-button rounded-full py-3 ${status === ReadingStatus.COMPLETED ? 'bg-primary text-white' : 'bg-gray-100'}`}
+          className={`status-button rounded-full py-3 ${status === ReadingStatus.COMPLETED ? 'bg-primary text-white font-bold shadow-md' : 'bg-gray-100'}`}
           onClick={() => handleStatusChange(ReadingStatus.COMPLETED)}
         >
           완독!
