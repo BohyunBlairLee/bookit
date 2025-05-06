@@ -6,18 +6,14 @@ import { ImageAnnotatorClient } from '@google-cloud/vision';
  */
 export async function extractTextFromImage(imageBuffer: Buffer): Promise<string> {
   try {
-    // API Key를 사용하여 클라이언트 초기화
+    // API Key만 사용하여 클라이언트 초기화
     const client = new ImageAnnotatorClient({
-      credentials: {
-        client_email: 'visionapi@placeholder.com', // 이 값은 실제로 사용되지 않지만 필요함
-        private_key: 'placeholder', // 이 값은 실제로 사용되지 않지만 필요함
-      },
       apiKey: process.env.GOOGLE_CLOUD_VISION_API_KEY,
     });
 
     // 이미지 버퍼로 텍스트 감지 요청
     const [result] = await client.textDetection({
-      image: { content: imageBuffer.toString('base64') }
+      image: { content: imageBuffer }
     });
 
     // 추출된 텍스트 반환
@@ -26,10 +22,13 @@ export async function extractTextFromImage(imageBuffer: Buffer): Promise<string>
       return detections[0].description;
     }
 
+    console.log("No text detected in the image");
     return '';
   } catch (error) {
     console.error('Error extracting text from image:', error);
-    throw new Error('텍스트 추출 중 오류가 발생했습니다.');
+    // 구체적인 에러 메시지를 포함
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    throw new Error(`텍스트 추출 중 오류가 발생했습니다: ${errorMessage}`);
   }
 }
 
