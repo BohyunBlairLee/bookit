@@ -93,7 +93,11 @@ export default function BookCard({ book, isSearchResult = false }: BookCardProps
     if (!isSearchResult && 'id' in book) {
       updateBookMutation.mutate({
         id: book.id,
-        status: value as ReadingStatus.WANT | ReadingStatus.READING | ReadingStatus.COMPLETED,
+        status: value,
+        ...(value === 'completed' && { 
+          rating: book.rating || 0,
+          completedDate: new Date().toISOString()
+        })
       });
     }
   };
