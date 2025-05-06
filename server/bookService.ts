@@ -46,6 +46,7 @@ export async function searchBooks(query: string) {
     console.log('⭐ 최종 검색어:', searchQuery);
     console.log('⭐ 카카오 API 키:', KAKAO_API_KEY.slice(0, 4) + '...');
     
+    // URL 인코딩 - Buffer를 사용해 한글을 정확히 인코딩
     const encodedQuery = encodeURIComponent(searchQuery);
     console.log('⭐ 인코딩된 검색어:', encodedQuery);
     

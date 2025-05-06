@@ -40,8 +40,14 @@ export default function SearchSection() {
   const { data, isLoading } = useQuery({
     queryKey: ['/api/books/search', debouncedQuery],
     queryFn: async () => {
-      // 한글 검색어가 제대로 전달되도록 인코딩 없이 URL 매개변수로 전달
-      const res = await fetch(`/api/books/search?q=${debouncedQuery}`);
+      // POST 요청으로 변경하여 JSON 형식으로 검색어 전달
+      const res = await fetch(`/api/books/search`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: debouncedQuery }),
+      });
       if (!res.ok) {
         throw new Error('검색에 실패했습니다');
       }
