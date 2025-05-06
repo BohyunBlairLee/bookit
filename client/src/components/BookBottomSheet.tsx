@@ -6,13 +6,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { StarRating } from "@/lib/starRating";
 import { format } from "date-fns";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import SimpleBottomSheet from "./SimpleBottomSheet";
 
 interface BookBottomSheetProps {
   book: BookSearchResult;
@@ -121,99 +115,89 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
   };
   
   return (
-    <Sheet open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <SheetContent side="bottom" className="px-0 pb-6 pt-2">
-        <div className="bottom-sheet-handle mb-4 mx-auto"></div>
-        
-        <SheetHeader className="text-left px-4">
-          <SheetTitle className="sr-only">책 정보</SheetTitle>
-          <SheetDescription className="sr-only">{book.title} 책의 상세 정보와 독서 상태를 선택할 수 있습니다.</SheetDescription>
-        </SheetHeader>
-        
-        <div className="book-bottom-sheet px-4">
-          
-          <div className="flex mb-6">
-            <img 
-              src={book.coverUrl}
-              alt={book.title}
-              className="w-24 h-36 rounded-md object-cover mr-4"
-            />
-            <div>
-              <h2 className="text-lg font-medium">{book.title}</h2>
-              <p className="text-gray-500 text-sm">{book.author}</p>
-              {book.publisher && book.publishedDate && (
-                <p className="text-gray-500 text-xs mt-1">
-                  {book.publisher} | {book.publishedDate}
-                </p>
-              )}
-            </div>
+    <SimpleBottomSheet open={open} onClose={onClose}>
+      <div className="book-bottom-sheet">
+        <div className="flex mb-6">
+          <img 
+            src={book.coverUrl}
+            alt={book.title}
+            className="w-24 h-36 rounded-md object-cover mr-4"
+          />
+          <div>
+            <h2 className="text-lg font-medium">{book.title}</h2>
+            <p className="text-gray-500 text-sm">{book.author}</p>
+            {book.publisher && book.publishedDate && (
+              <p className="text-gray-500 text-xs mt-1">
+                {book.publisher} | {book.publishedDate}
+              </p>
+            )}
           </div>
-          
-          {/* 상태 선택 버튼 */}
-          <div className="status-buttons grid grid-cols-3 gap-2 mb-6">
-            <button 
-              className={`status-button rounded-md py-3 ${status === ReadingStatus.READING ? 'bg-primary text-white' : 'bg-gray-100'}`}
-              onClick={() => handleStatusChange(ReadingStatus.READING)}
-            >
-              읽는 중
-            </button>
-            <button 
-              className={`status-button rounded-md py-3 ${status === ReadingStatus.WANT ? 'bg-primary text-white' : 'bg-gray-100'}`}
-              onClick={() => handleStatusChange(ReadingStatus.WANT)}
-            >
-              읽을 예정
-            </button>
-            <button 
-              className={`status-button rounded-md py-3 ${status === ReadingStatus.COMPLETED ? 'bg-primary text-white' : 'bg-gray-100'}`}
-              onClick={() => handleStatusChange(ReadingStatus.COMPLETED)}
-            >
-              완독!
-            </button>
-          </div>
-          
-          {/* 완독 상태일 때만 표시될 별점과 날짜 선택 */}
-          {status === ReadingStatus.COMPLETED && (
-            <>
-              <div className="mb-4">
-                <div className="flex justify-between items-center">
-                  <p className="text-sm">평점</p>
-                  <p className="text-sm">{rating.toFixed(1)}</p>
-                </div>
-                <div className="flex justify-center my-2">
-                  <StarRating
-                    rating={rating}
-                    onChange={setRating}
-                    size="lg"
-                  />
-                </div>
-              </div>
-              
-              <div className="mb-6">
-                <div className="flex justify-between items-center mb-2">
-                  <p className="text-sm">완독일</p>
-                  <button 
-                    className="text-sm bg-gray-100 px-3 py-1 rounded-md"
-                    onClick={() => setShowCalendar(!showCalendar)}
-                  >
-                    {completedDate}
-                  </button>
-                </div>
-                
-                {showCalendar && renderDatePicker()}
-              </div>
-            </>
-          )}
-          
-          {/* 버튼 */}
-          <button
-            className="w-full bg-primary text-white py-3 rounded-md font-medium"
-            onClick={handleAddBook}
-            disabled={addBookMutation.isPending}
+        </div>
+        
+        {/* 상태 선택 버튼 */}
+        <div className="status-buttons grid grid-cols-3 gap-2 mb-6">
+          <button 
+            className={`status-button rounded-md py-3 ${status === ReadingStatus.READING ? 'bg-primary text-white' : 'bg-gray-100'}`}
+            onClick={() => handleStatusChange(ReadingStatus.READING)}
           >
-            {addBookMutation.isPending ? "추가 중..." : "책 추가하기"}
+            읽는 중
+          </button>
+          <button 
+            className={`status-button rounded-md py-3 ${status === ReadingStatus.WANT ? 'bg-primary text-white' : 'bg-gray-100'}`}
+            onClick={() => handleStatusChange(ReadingStatus.WANT)}
+          >
+            읽을 예정
+          </button>
+          <button 
+            className={`status-button rounded-md py-3 ${status === ReadingStatus.COMPLETED ? 'bg-primary text-white' : 'bg-gray-100'}`}
+            onClick={() => handleStatusChange(ReadingStatus.COMPLETED)}
+          >
+            완독!
           </button>
         </div>
-      </SheetContent>
-    </Sheet>
+        
+        {/* 완독 상태일 때만 표시될 별점과 날짜 선택 */}
+        {status === ReadingStatus.COMPLETED && (
+          <>
+            <div className="mb-4">
+              <div className="flex justify-between items-center">
+                <p className="text-sm">평점</p>
+                <p className="text-sm">{rating.toFixed(1)}</p>
+              </div>
+              <div className="flex justify-center my-2">
+                <StarRating
+                  rating={rating}
+                  onChange={setRating}
+                  size="lg"
+                />
+              </div>
+            </div>
+            
+            <div className="mb-6">
+              <div className="flex justify-between items-center mb-2">
+                <p className="text-sm">완독일</p>
+                <button 
+                  className="text-sm bg-gray-100 px-3 py-1 rounded-md"
+                  onClick={() => setShowCalendar(!showCalendar)}
+                >
+                  {completedDate}
+                </button>
+              </div>
+              
+              {showCalendar && renderDatePicker()}
+            </div>
+          </>
+        )}
+        
+        {/* 버튼 */}
+        <button
+          className="w-full bg-primary text-white py-3 rounded-md font-medium"
+          onClick={handleAddBook}
+          disabled={addBookMutation.isPending}
+        >
+          {addBookMutation.isPending ? "추가 중..." : "책 추가하기"}
+        </button>
+      </div>
+    </SimpleBottomSheet>
   );
 }
