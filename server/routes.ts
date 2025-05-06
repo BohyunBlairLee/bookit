@@ -1,18 +1,27 @@
 import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
+import { storage as dbStorage } from "./storage";
 import { z } from "zod";
 import { bookSearchResultSchema, insertBookSchema, updateBookStatusSchema, insertReadingNoteSchema } from "@shared/schema";
 import { searchBooks } from "./bookService";
+import multer from 'multer';
+import { extractTextFromImage, processExtractedText } from "./visionService";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // 이미지 업로드를 위한 multer 설정
+  const multerStorage = multer.memoryStorage();
+  const upload = multer({ 
+    storage: multerStorage,
+    limits: { fileSize: 5 * 1024 * 1024 } // 5MB 크기 제한
+  });
+
   // Mock user ID since we're not implementing auth for this demo
   const MOCK_USER_ID = 1;
 
   // Create default user if not exists
-  const existingUser = await storage.getUserByUsername("user");
+  const existingUser = await dbStorage.getUserByUsername("user");
   if (!existingUser) {
-    await storage.createUser({
+    await dbStorage.createUser({
       username: "user",
       password: "password"
     });
@@ -42,9 +51,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       let books;
       
       if (status) {
-        books = await storage.getBooksByStatus(MOCK_USER_ID, status);
+        books = await dbStorage.getBooksByStatus(MOCK_USER_ID, status);
       } else {
-        books = await storage.getAllBooks(MOCK_USER_ID);
+        books = await dbStorage.getAllBooks(MOCK_USER_ID);
       }
       
       res.json(books);
@@ -61,7 +70,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid book ID" });
       }
 
-      const book = await storage.getBook(id);
+      const book = await dbStorage.getBook(id);
       if (!book) {
         return res.status(404).json({ message: "Book not found" });
       }
@@ -81,7 +90,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userId: MOCK_USER_ID
       });
 
-      const newBook = await storage.addBook(validatedData);
+      const newBook = await dbStorage.addBook(validatedData);
       res.status(201).json(newBook);
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -105,7 +114,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         id
       });
 
-      const updatedBook = await storage.updateBookStatus(validatedData);
+      const updatedBook = await dbStorage.updateBookStatus(validatedData);
       if (!updatedBook) {
         return res.status(404).json({ message: "Book not found" });
       }
@@ -127,7 +136,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid book ID" });
       }
 
-      const success = await storage.removeBook(id);
+      const success = await dbStorage.removeBook(id);
       if (!success) {
         return res.status(404).json({ message: "Book not found" });
       }
@@ -146,12 +155,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid book ID" });
       }
       
-      const book = await storage.getBook(bookId);
+      const book = await dbStorage.getBook(bookId);
       if (!book) {
         return res.status(404).json({ message: "Book not found" });
       }
       
-      const notes = await storage.getReadingNotes(bookId);
+      const notes = await dbStorage.getReadingNotes(bookId);
       res.json(notes);
     } catch (error) {
       res.status(500).json({ message: "Failed to get reading notes", error: String(error) });
@@ -166,7 +175,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid book ID" });
       }
       
-      const book = await storage.getBook(bookId);
+      const book = await dbStorage.getBook(bookId);
       if (!book) {
         return res.status(404).json({ message: "Book not found" });
       }
@@ -177,7 +186,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         bookId
       });
       
-      const newNote = await storage.addReadingNote(validatedData);
+      const newNote = await dbStorage.addReadingNote(validatedData);
       res.status(201).json(newNote);
     } catch (error) {
       if (error instanceof z.ZodError) {
