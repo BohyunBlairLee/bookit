@@ -21,40 +21,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Search books using Kakao API
   app.get("/api/books/search", async (req: Request, res: Response) => {
     try {
-      // 테스트용 정적 검색 결과
-      if (req.query.q && typeof req.query.q === 'string' && req.query.q.includes('harry')) {
-        // 영어 검색 (harry)
-        return res.json(await searchBooks("harry"));
-      } else {
-        // 다른 모든 검색은 '해리포터' 검색 결과를 반환 (임시 해결책)
-        console.log('📚 해리포터 검색 결과 제공 중');
-        return res.json({
-          results: [
-            {
-              title: "해리 포터와 마법사의 돌",
-              author: "J.K. 롤링",
-              coverUrl: "https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F1467038",
-              publisher: "문학수첩",
-              publishedDate: "2019-11-15"
-            },
-            {
-              title: "해리 포터와 비밀의 방",
-              author: "J.K. 롤링",
-              coverUrl: "https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F1467572",
-              publisher: "문학수첩",
-              publishedDate: "2019-11-15"
-            },
-            {
-              title: "해리 포터와 아즈카반의 죄수",
-              author: "J.K. 롤링",
-              coverUrl: "https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F1467038",
-              publisher: "문학수첩",
-              publishedDate: "2019-11-15"
-            }
-          ],
-          total: 3
-        });
+      const query = req.query.q as string;
+      if (!query) {
+        return res.status(400).json({ error: "Search query is required" });
       }
+      
+      console.log(`📚 검색 요청: "${query}"`);
+      const results = await searchBooks(query);
+      return res.json(results);
     } catch (error) {
       console.error("Book search error:", error);
       res.status(500).json({ message: "Failed to search books", error: String(error) });
