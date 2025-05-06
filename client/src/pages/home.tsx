@@ -153,7 +153,7 @@ export default function Home() {
   return (
     <div className="page-container">
       <div className="mobile-header">
-        <h1 className="text-xl font-bold">홈</h1>
+        <h1 className="text-2xl font-bold">홈</h1>
         <button 
           className="text-black"
           onClick={() => setShowAddBookModal(true)}
@@ -228,7 +228,12 @@ export default function Home() {
                           <h3 className="book-title">{book.title}</h3>
                           <p className="book-author">{book.author}</p>
                           <p className="book-info">
-                            {new Date(book.createdAt).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })} 추가
+                            {book.publisher} | {
+                              book.publishedDate 
+                                ? new Date(book.publishedDate).getFullYear() + '년 ' + 
+                                  (new Date(book.publishedDate).getMonth() + 1) + '월'
+                                : ''
+                            }
                           </p>
                           <Link to={`/book/${book.id}`}>
                             <button className="continue-reading-button">
