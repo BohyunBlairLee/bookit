@@ -32,7 +32,20 @@ export const books = pgTable("books", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+// Reading Notes schema for book notes
+export const readingNotes = pgTable("reading_notes", {
+  id: serial("id").primaryKey(),
+  bookId: integer("book_id").notNull(),
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 export const insertBookSchema = createInsertSchema(books).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertReadingNoteSchema = createInsertSchema(readingNotes).omit({
   id: true,
   createdAt: true,
 });
@@ -42,10 +55,14 @@ export const bookSearchResultSchema = z.object({
   title: z.string(),
   author: z.string(),
   coverUrl: z.string(),
+  publishedDate: z.string().optional(),
+  publisher: z.string().optional(),
 });
 
 export type InsertBook = z.infer<typeof insertBookSchema>;
+export type InsertReadingNote = z.infer<typeof insertReadingNoteSchema>;
 export type Book = typeof books.$inferSelect;
+export type ReadingNote = typeof readingNotes.$inferSelect;
 export type BookSearchResult = z.infer<typeof bookSearchResultSchema>;
 
 // Reading status options
