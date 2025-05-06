@@ -135,21 +135,21 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
         </div>
         
         {/* 상태 선택 버튼 */}
-        <div className="status-buttons grid grid-cols-3 gap-2 mb-6">
+        <div className="status-buttons grid grid-cols-3 gap-3 my-6">
           <button 
-            className={`status-button rounded-md py-3 ${status === ReadingStatus.READING ? 'bg-primary text-white' : 'bg-gray-100'}`}
+            className={`status-button ${status === ReadingStatus.READING ? 'bg-primary text-white' : 'bg-gray-100'}`}
             onClick={() => handleStatusChange(ReadingStatus.READING)}
           >
             읽는 중
           </button>
           <button 
-            className={`status-button rounded-md py-3 ${status === ReadingStatus.WANT ? 'bg-primary text-white' : 'bg-gray-100'}`}
+            className={`status-button ${status === ReadingStatus.WANT ? 'bg-primary text-white' : 'bg-gray-100'}`}
             onClick={() => handleStatusChange(ReadingStatus.WANT)}
           >
             읽을 예정
           </button>
           <button 
-            className={`status-button rounded-md py-3 ${status === ReadingStatus.COMPLETED ? 'bg-primary text-white' : 'bg-gray-100'}`}
+            className={`status-button ${status === ReadingStatus.COMPLETED ? 'bg-primary text-white' : 'bg-gray-100'}`}
             onClick={() => handleStatusChange(ReadingStatus.COMPLETED)}
           >
             완독!
@@ -191,7 +191,7 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
         
         {/* 책 추가하기 버튼 */}
         <button
-          className="w-full bg-primary text-white py-3 rounded-md font-medium"
+          className="w-full bg-primary text-white py-4 rounded-xl font-medium text-base mt-4"
           onClick={handleAddBook}
           disabled={addBookMutation.isPending}
         >

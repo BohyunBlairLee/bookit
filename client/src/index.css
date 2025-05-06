@@ -302,6 +302,16 @@ html, body {
   }
 }
 
+/* 바텀시트 읽기 상태 버튼 */
+.status-buttons button {
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
 .star-rating {
   align-items: center;
   margin-top: 1rem;
