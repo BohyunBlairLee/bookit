@@ -1,7 +1,47 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { BookSearchResult } from "@shared/schema";
-import { Search, X, Plus, Cat } from "lucide-react";
+import { Search, X, Plus, BookOpen } from "lucide-react";
+import BookBottomSheet from "@/components/BookBottomSheet";
+
+// 책 아이템 컴포넌트 (바텀시트 상태 처리를 위해 분리)
+function BookItem({ book }: { book: BookSearchResult }) {
+  const [showBottomSheet, setShowBottomSheet] = useState(false);
+  
+  return (
+    <div>
+      <div
+        onClick={() => setShowBottomSheet(true)}
+        className="book-item block cursor-pointer"
+      >
+        <div className="flex items-start gap-4">
+          <img
+            src={book.coverUrl}
+            alt={book.title}
+            className="w-20 h-28 object-cover rounded-md"
+          />
+          <div>
+            <h3 className="font-medium">{book.title}</h3>
+            <p className="text-sm text-muted-foreground">{book.author}</p>
+            {book.publishedDate && (
+              <p className="text-xs text-muted-foreground mt-1">
+                {book.publisher} | {book.publishedDate}
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+      
+      {showBottomSheet && (
+        <BookBottomSheet 
+          book={book}
+          open={showBottomSheet}
+          onClose={() => setShowBottomSheet(false)}
+        />
+      )}
+    </div>
+  );
+}
 
 export default function Home() {
   const [query, setQuery] = useState<string>("");
@@ -78,7 +118,7 @@ export default function Home() {
       
       {!isSearching && (
         <div className="flex flex-col items-center justify-center h-[70vh]">
-          <Cat size={48} className="text-muted-foreground mb-4" />
+          <BookOpen size={48} className="text-muted-foreground mb-4" />
           <p className="text-center text-muted-foreground">
             읽고 있는 책이 없어요!
             <br/>
@@ -118,28 +158,7 @@ export default function Home() {
           ) : (
             <div className="space-y-4">
               {searchResults.map((book: BookSearchResult) => (
-                <a
-                  key={book.title + book.author}
-                  href={`/search/details?title=${encodeURIComponent(book.title)}&author=${encodeURIComponent(book.author)}&coverUrl=${encodeURIComponent(book.coverUrl)}`}
-                  className="book-item block"
-                >
-                  <div className="flex items-start gap-4">
-                    <img
-                      src={book.coverUrl}
-                      alt={book.title}
-                      className="w-20 h-28 object-cover rounded-md"
-                    />
-                    <div>
-                      <h3 className="font-medium">{book.title}</h3>
-                      <p className="text-sm text-muted-foreground">{book.author}</p>
-                      {book.publishedDate && (
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {book.publisher} | {book.publishedDate}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </a>
+                <BookItem key={book.title + book.author} book={book} />
               ))}
             </div>
           )}
@@ -212,28 +231,7 @@ export default function Home() {
                 <h2 className="text-lg font-medium mb-4">검색 결과</h2>
                 <div className="space-y-4">
                   {searchResults.map((book: BookSearchResult) => (
-                    <a
-                      key={book.title + book.author}
-                      href={`/search/details?title=${encodeURIComponent(book.title)}&author=${encodeURIComponent(book.author)}&coverUrl=${encodeURIComponent(book.coverUrl)}`}
-                      className="book-item block"
-                    >
-                      <div className="flex items-start gap-4">
-                        <img
-                          src={book.coverUrl}
-                          alt={book.title}
-                          className="w-20 h-28 object-cover rounded-md"
-                        />
-                        <div>
-                          <h3 className="font-medium">{book.title}</h3>
-                          <p className="text-sm text-muted-foreground">{book.author}</p>
-                          {book.publishedDate && (
-                            <p className="text-xs text-muted-foreground mt-1">
-                              {book.publisher} | {book.publishedDate}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </a>
+                    <BookItem key={book.title + book.author} book={book} />
                   ))}
                 </div>
               </div>
