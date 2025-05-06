@@ -78,9 +78,16 @@ export class MemStorage implements IStorage {
     const id = this.bookIdCounter++;
     const now = new Date();
     const book: Book = { 
-      ...insertBook, 
-      id, 
-      status: insertBook.status || "want", // 확인: status가 반드시 설정되도록 함
+      id,
+      title: insertBook.title,
+      author: insertBook.author,
+      coverUrl: insertBook.coverUrl,
+      userId: insertBook.userId,
+      status: insertBook.status || "want",
+      rating: insertBook.rating || null,
+      completedDate: insertBook.completedDate || null,
+      progress: insertBook.progress || null,
+      notes: insertBook.notes || null,
       createdAt: now
     };
     this.books.set(id, book);
@@ -92,12 +99,17 @@ export class MemStorage implements IStorage {
     if (!book) return undefined;
 
     const updatedBook: Book = {
-      ...book,
+      id: book.id,
+      title: book.title,
+      author: book.author,
+      coverUrl: book.coverUrl,
+      userId: book.userId,
       status: update.status,
-      ...(update.rating !== undefined && { rating: update.rating }),
-      ...(update.completedDate !== undefined && { completedDate: new Date(update.completedDate) }),
-      ...(update.progress !== undefined && { progress: update.progress }),
-      ...(update.notes !== undefined && { notes: update.notes }),
+      rating: update.rating !== undefined ? update.rating : book.rating,
+      completedDate: update.completedDate !== undefined ? new Date(update.completedDate) : book.completedDate,
+      progress: update.progress !== undefined ? update.progress : book.progress,
+      notes: update.notes !== undefined ? update.notes : book.notes,
+      createdAt: book.createdAt
     };
 
     this.books.set(book.id, updatedBook);
