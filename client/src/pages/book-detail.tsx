@@ -45,10 +45,11 @@ export default function BookDetail({ id }: BookDetailProps) {
   
   const updateStatusMutation = useMutation({
     mutationFn: async (updateData: UpdateBookStatus) => {
-      return apiRequest(`/api/books/${id}`, {
-        method: 'PATCH',
-        body: JSON.stringify(updateData),
-      });
+      return apiRequest(
+        'PATCH',
+        `/api/books/${id}`,
+        updateData
+      );
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/books", id] });
@@ -66,10 +67,11 @@ export default function BookDetail({ id }: BookDetailProps) {
   
   const addNoteMutation = useMutation({
     mutationFn: async (content: string) => {
-      return apiRequest(`/api/books/${id}/notes`, {
-        method: 'POST',
-        body: JSON.stringify({ content }),
-      });
+      return apiRequest(
+        'POST',
+        `/api/books/${id}/notes`,
+        { content }
+      );
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/books", id, "notes"] });
@@ -88,9 +90,10 @@ export default function BookDetail({ id }: BookDetailProps) {
   
   const removeNoteMutation = useMutation({
     mutationFn: async (noteId: number) => {
-      return apiRequest(`/api/notes/${noteId}`, {
-        method: 'DELETE',
-      });
+      return apiRequest(
+        'DELETE',
+        `/api/notes/${noteId}`
+      );
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/books", id, "notes"] });
@@ -119,7 +122,7 @@ export default function BookDetail({ id }: BookDetailProps) {
     
     const updateData: UpdateBookStatus = {
       id: book.id,
-      status: status as ReadingStatus[keyof typeof ReadingStatus]
+      status: status as ReadingStatusType
     };
     
     // 완독 상태로 변경 시 별점과 완독일 추가
