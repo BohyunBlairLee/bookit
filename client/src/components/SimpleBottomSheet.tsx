@@ -36,12 +36,12 @@ export default function SimpleBottomSheet({ open, onClose, children, title }: Si
     <div className="fixed inset-0 z-50 overflow-hidden">
       <div 
         ref={overlayRef}
-        className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm transition-opacity animate-in"
+        className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm transition-opacity"
         style={{ animation: 'fadeIn 0.3s ease-out forwards' }}
       />
       
       <div 
-        className="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-xl bg-white p-4"
+        className="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-xl bg-white p-6"
         style={{ animation: 'slideUp 0.3s ease-out forwards' }}
       >
         <div className="relative">

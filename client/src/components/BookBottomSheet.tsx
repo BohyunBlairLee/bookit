@@ -115,7 +115,7 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
   };
   
   return (
-    <SimpleBottomSheet open={open} onClose={onClose}>
+    <SimpleBottomSheet open={open} onClose={onClose} title="책 추가하기">
       <div className="book-bottom-sheet">
         <div className="flex mb-6">
           <img 
@@ -191,7 +191,7 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
         
         {/* 책 추가하기 버튼 */}
         <button
-          className="w-full bg-primary text-white py-4 rounded-xl font-medium text-base mt-4"
+          className="w-full bg-primary text-white py-4 rounded-xl font-medium text-lg mt-8"
           onClick={handleAddBook}
           disabled={addBookMutation.isPending}
         >
