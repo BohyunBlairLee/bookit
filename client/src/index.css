@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 210 40% 98%;
+  --foreground: 229 22.7% 17.5%;
+  --muted: 60 4.8% 95.9%;
+  --muted-foreground: 25 5.3% 44.7%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 229 22.7% 17.5%;
+  --card: 0 0% 100%;
+  --card-foreground: 229 22.7% 17.5%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --primary: 220 16.8% 36.1%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 208 93.5% 65.9%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --accent: 141 43.7% 50.6%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 60 9.1% 97.8%;
+  --ring: 229 22.7% 17.5%;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 227 26% 7%;
+  --foreground: 210 40% 98%;
+  --muted: 217.9 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --popover: 227 26% 7%;
+  --popover-foreground: 210 40% 98%;
+  --card: 227 26% 7%;
+  --card-foreground: 210 40% 98%;
+  --border: 217.9 32.6% 17.5%;
+  --input: 217.9 32.6% 17.5%;
+  --primary: 220 16.8% 36.1%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 208 93.5% 65.9%;
+  --secondary-foreground: 227 26% 7%;
+  --accent: 141 43.7% 50.6%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --ring: 212.7 26.8% 83.9%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+}
+
+/* Custom transitions for book cards */
+.book-card {
+  transition: all 0.3s ease;
+}
+
+.book-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Custom styles for Star Rating */
+.star-rating {
+  display: inline-flex;
+  align-items: center;
+}
+
+.star-rating .star {
+  color: #EAB308;
+  cursor: pointer;
+}
+
+.star-rating .star-empty {
+  color: #D1D5DB;
+}
