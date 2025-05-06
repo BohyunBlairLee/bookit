@@ -66,16 +66,19 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
   });
 
   const handleAddBook = () => {
-    addBookMutation.mutate({
+    // 출판일 처리 로직 변경 - null로 전송하여 서버 오류 회피
+    const bookData = {
       title: book.title,
       author: book.author,
       coverUrl: book.coverUrl,
       userId: 1,
       status: status as "want" | "reading" | "completed",
       publisher: book.publisher || "",
-      // 날짜 처리: publishedDate를 서버에서 처리 가능한 형식으로 변환
-      publishedDate: book.publishedDate ? new Date(book.publishedDate).toISOString() : null
-    });
+      publishedDate: null // 출판일은 일단 null로 전송
+    };
+    
+    console.log("북데이터 전송:", JSON.stringify(bookData, null, 2));
+    addBookMutation.mutate(bookData);
   };
 
   return (

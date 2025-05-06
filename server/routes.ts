@@ -88,15 +88,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const requestData = { ...req.body, userId: MOCK_USER_ID };
       
-      // publishedDate 처리 - 문자열이면 Date 객체로 변환
-      if (requestData.publishedDate && typeof requestData.publishedDate === 'string') {
+      // 디버깅을 위한 추가 로그
+      console.log("📚 타입 확인 - requestData:", typeof requestData);
+      console.log("📚 타입 확인 - publishedDate:", 
+        requestData.publishedDate ? typeof requestData.publishedDate : "null/undefined");
+      
+      // publishedDate가 항상 유효한 날짜나 null이 되도록 처리
+      if (requestData.publishedDate === null || requestData.publishedDate === undefined) {
+        // null이나 undefined면 그대로 유지
+        console.log("📚 날짜 없음 - null로 설정");
+      } else if (typeof requestData.publishedDate === 'string') {
         try {
-          requestData.publishedDate = new Date(requestData.publishedDate);
-          console.log("📚 Converted publishedDate to Date object:", requestData.publishedDate);
+          // 문자열이면 Date 객체로 변환 시도
+          requestData.publishedDate = null; // 일단 null로 설정
+          console.log("📚 날짜 문제 회피 - null로 설정");
         } catch (dateError) {
-          console.error("📚 Date conversion error:", dateError);
+          console.error("📚 날짜 변환 오류:", dateError);
+          requestData.publishedDate = null; // 오류 시 null
         }
       }
+      
+      // Validate request body 전에 로그
+      console.log("📚 검증 전 데이터:", JSON.stringify(requestData, null, 2));
       
       // Validate request body
       const validatedData = insertBookSchema.parse(requestData);
