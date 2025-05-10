@@ -11,6 +11,9 @@ interface BookDetailProps {
   id: number;
 }
 
+// 이미지 편집기 컴포넌트 가져오기
+import ImageEditor from "@/components/ImageEditor";
+
 export default function BookDetail({ id }: BookDetailProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -24,6 +27,10 @@ export default function BookDetail({ id }: BookDetailProps) {
   const [showCameraOptions, setShowCameraOptions] = useState(false);
   const [activeNoteType, setActiveNoteType] = useState<'quote' | 'thought' | 'combined' | null>(null);
   const [isProcessingImage, setIsProcessingImage] = useState(false);
+  
+  // 이미지 편집기 관련 상태
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [showImageEditor, setShowImageEditor] = useState(false);
   
   const { data: book, isLoading: isLoadingBook } = useQuery<Book>({
     queryKey: ["/api/books", id],
@@ -183,8 +190,8 @@ export default function BookDetail({ id }: BookDetailProps) {
     }
   };
   
-  // 이미지 파일 처리 함수
-  const handleImageUpload = async (file: File) => {
+  // 이미지 파일에서 텍스트 추출 함수
+  const extractTextFromImage = async (file: File) => {
     try {
       setIsProcessingImage(true);
       
@@ -234,8 +241,25 @@ export default function BookDetail({ id }: BookDetailProps) {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      handleImageUpload(file);
+      // 선택한 이미지 설정 및 편집기 표시
+      setSelectedImage(file);
+      setShowImageEditor(true);
+      setShowCameraOptions(false);
     }
+  };
+  
+  // 이미지 편집기 취소 핸들러
+  const handleCancelImageEdit = () => {
+    setSelectedImage(null);
+    setShowImageEditor(false);
+  };
+  
+  // 이미지 편집기 확인 핸들러
+  const handleConfirmImageEdit = (editedFile: File) => {
+    // 편집된 이미지로 텍스트 추출
+    extractTextFromImage(editedFile);
+    setSelectedImage(null);
+    setShowImageEditor(false);
   };
   
   if (isLoadingBook) {
@@ -521,27 +545,32 @@ export default function BookDetail({ id }: BookDetailProps) {
                       {showCameraOptions && (
                         <>
                           <div className="fixed inset-0 bg-black bg-opacity-50 z-40" onClick={() => setShowCameraOptions(false)}></div>
-                          <div className="absolute right-0 top-10 bg-white shadow-lg rounded-lg py-1 z-50 w-48">
+                          <div className="absolute right-0 top-10 bg-white shadow-lg rounded-lg py-1 z-50 w-56">
+                            <div className="px-4 py-2 border-b border-gray-100">
+                              <h3 className="font-medium text-sm">텍스트 추출</h3>
+                            </div>
                             <button 
-                              className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100"
+                              className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100 flex items-center"
                               onClick={() => {
                                 toast({ 
                                   title: "카메라 기능", 
-                                  description: "사진에서 추출 기능은 현재 개발 중입니다." 
+                                  description: "직접 촬영 기능은 현재 개발 중입니다." 
                                 });
                                 setShowCameraOptions(false);
                               }}
                             >
-                              사진에서 추출
+                              <Camera size={16} className="mr-2 text-gray-500" />
+                              <span>사진 촬영하기</span>
                             </button>
                             <button 
-                              className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100"
+                              className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100 flex items-center"
                               onClick={() => {
                                 handleFileSelect();
                                 setShowCameraOptions(false);
                               }}
                             >
-                              카메라롤에서 추출
+                              <BookOpen size={16} className="mr-2 text-gray-500" />
+                              <span>카메라롤에서 가져오기</span>
                             </button>
                           </div>
                         </>
@@ -681,6 +710,15 @@ export default function BookDetail({ id }: BookDetailProps) {
         accept="image/*"
         onChange={handleFileChange}
       />
+      
+      {/* 이미지 편집기 */}
+      {showImageEditor && selectedImage && (
+        <ImageEditor 
+          imageFile={selectedImage} 
+          onCancel={handleCancelImageEdit} 
+          onConfirm={handleConfirmImageEdit} 
+        />
+      )}
     </div>
   );
 }
