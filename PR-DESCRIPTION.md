@@ -1,7 +1,7 @@
-# 웹앱을 PWA(Progressive Web App)로 변환
+# 웹앱을 PWA로 변환 및 iOS/Android 앱스토어 배포 지원
 
 ## 📱 Summary
-BookIt 웹 애플리케이션을 Progressive Web App(PWA)로 변환하여 사용자가 모바일 기기에 앱으로 설치하고 오프라인에서도 사용할 수 있도록 개선했습니다.
+BookIt 웹 애플리케이션을 Progressive Web App(PWA)로 변환하고, Capacitor를 사용하여 iOS App Store와 Google Play Store에 배포할 수 있는 네이티브 앱으로 변환했습니다. 이제 사용자가 모바일 기기에 앱으로 설치하고, 오프라인에서도 사용할 수 있으며, 앱스토어에서 다운로드할 수 있습니다.
 
 ## ✨ 주요 변경사항
 
@@ -58,15 +58,73 @@ BookIt 웹 애플리케이션을 Progressive Web App(PWA)로 변환하여 사용
 - [ ] 서비스 워커 업데이트 기능 테스트
 - [ ] Lighthouse PWA 점수 확인
 
+### 네이티브 앱 변환 (Capacitor)
+- **@capacitor/core, @capacitor/cli** 설치
+- **@capacitor/ios** - iOS 네이티브 앱 지원
+- **@capacitor/android** - Android 네이티브 앱 지원
+- **capacitor.config.ts** 생성 및 구성
+- iOS/Android 플랫폼 프로젝트 생성
+- 네이티브 앱 아이콘 및 스플래시 스크린 자동 생성
+
+### 생성된 네이티브 리소스
+- 📁 `android/` - Android Studio 프로젝트
+  - 모든 해상도별 앱 아이콘 (ldpi ~ xxxhdpi)
+  - 스플래시 스크린 (가로/세로)
+  - Google Play 배포용 설정
+- 📁 `ios/` - Xcode 프로젝트
+  - iOS 앱 아이콘 (20x20 ~ 1024x1024, 모든 스케일)
+  - 스플래시 스크린
+  - App Store 배포용 설정
+- 📁 `resources/` - 원본 리소스 파일
+
+### 빌드 스크립트 추가
+- `npm run cap:sync` - 웹 빌드 후 네이티브 동기화
+- `npm run cap:open:ios` - Xcode 열기
+- `npm run cap:open:android` - Android Studio 열기
+- `npm run cap:build:android` - Android Release APK/AAB 빌드
+- `npm run cap:build:ios` - iOS 빌드 준비
+- `npm run generate:icons` - 네이티브 아이콘 재생성
+
 ## 📦 Dependencies
 
 새로 추가된 패키지:
+
+**PWA:**
 - `vite-plugin-pwa@^1.2.0` (devDependencies)
 - `sharp@^0.34.5` (devDependencies - 아이콘 생성용)
 
+**네이티브 앱:**
+- `@capacitor/core@^8.0.0`
+- `@capacitor/cli@^8.0.0`
+- `@capacitor/ios@^8.0.0`
+- `@capacitor/android@^8.0.0`
+
 ## 🚀 배포 후 확인사항
 
+**PWA (웹):**
 1. HTTPS 환경에서 배포되었는지 확인 (PWA는 HTTPS 필수)
 2. 모바일 브라우저에서 설치 배너가 표시되는지 확인
 3. Chrome DevTools > Application > Manifest 탭에서 설정 확인
 4. Service Worker가 정상 등록되었는지 확인
+
+**앱스토어 배포:**
+1. **상세 가이드**: `APP-STORE-DEPLOYMENT.md` 파일 참조
+2. **Android (Google Play)**:
+   - Developer 계정 필요 ($25 일회성)
+   - 앱 서명 키 생성
+   - AAB 파일 빌드 및 업로드
+   - 심사 1-3일 소요
+3. **iOS (App Store)**:
+   - Developer 계정 필요 ($99/년)
+   - macOS 및 Xcode 필요
+   - 앱 아카이브 및 업로드
+   - 심사 1-2주 소요
+
+## 📖 문서
+
+- **APP-STORE-DEPLOYMENT.md**: 앱스토어 배포 완벽 가이드
+  - 계정 생성 방법
+  - 앱 서명 및 빌드
+  - Play Store / App Store 제출 절차
+  - 스크린샷 가이드
+  - 문제 해결 방법
