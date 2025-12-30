@@ -1,0 +1,13 @@
+{
+  "images": [
+    {
+      "filename": "splash.png",
+      "idiom": "universal",
+      "scale": "1x"
+    }
+  ],
+  "info": {
+    "author": "capacitor",
+    "version": 1
+  }
+}
