@@ -656,3 +656,27 @@ html, body {
   transform: scale(0.98);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
+
+/* 🚑 Capacitor iOS touch freeze emergency fix */
+html, body {
+  position: relative !important;
+  height: auto !important;
+  overflow: auto !important;
+}
+
+#root {
+  position: relative !important;
+  height: auto !important;
+  overflow: auto !important;
+}
+
+.page-container {
+  position: relative !important;
+  min-height: auto !important;
+  overflow: visible !important;
+}
+
+/* 모든 fixed overlay가 터치를 먹지 않게 */
+.fixed {
+  pointer-events: auto !important;
+}
