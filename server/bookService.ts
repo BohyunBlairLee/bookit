@@ -93,12 +93,10 @@ export async function searchBooks(query: string) {
     };
   } catch (error) {
     console.error('Error searching books:', error);
-    
+
     // Fallback to mock data if the API call fails
     return {
-      results: FALLBACK_KOREAN_BOOKS.filter(book => 
-        book.title.includes(query) || book.author.includes(query)
-      ),
+      results: FALLBACK_KOREAN_BOOKS,
       total: FALLBACK_KOREAN_BOOKS.length,
       error: 'API error, showing fallback results'
     };

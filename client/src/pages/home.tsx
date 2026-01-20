@@ -94,9 +94,8 @@ export default function Home() {
     queryFn: async ({ queryKey }) => {
       const searchQuery = queryKey[1] as string;
       if (!searchQuery) return { results: [], total: 0 };
-      const res = await fetch(getApiUrl(`/api/books/search?q=${encodeURIComponent(searchQuery)}`));
-      if (!res.ok) throw new Error("Failed to search books");
-      return res.json();
+      const res = await apiRequest("GET", `/api/books/search?q=${encodeURIComponent(searchQuery)}`);
+      return res.data;
     },
     enabled: false, // 자동 fetch 방지, 사용자가 검색 버튼을 클릭할 때만 실행
   });
