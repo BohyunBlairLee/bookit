@@ -1,8 +1,10 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
+import { getApiUrl } from "./api";
+import { CapacitorHttp, HttpResponse } from '@capacitor/core';
 
-async function throwIfResNotOk(res: Response) {
-  if (!res.ok) {
-    const text = (await res.text()) || res.statusText;
+async function throwIfResNotOk(res: HttpResponse) {
+  if (res.status < 200 || res.status >= 300) {
+    const text = typeof res.data === 'string' ? res.data : JSON.stringify(res.data);
     throw new Error(`${res.status}: ${text}`);
   }
 }
@@ -11,12 +13,12 @@ export async function apiRequest(
   method: string,
   url: string,
   data?: unknown | undefined,
-): Promise<Response> {
-  const res = await fetch(url, {
-    method,
+): Promise<HttpResponse> {
+  const res = await CapacitorHttp.request({
+    method: method as any,
+    url: getApiUrl(url),
     headers: data ? { "Content-Type": "application/json" } : {},
-    body: data ? JSON.stringify(data) : undefined,
-    credentials: "include",
+    data: data,
   });
 
   await throwIfResNotOk(res);
@@ -29,8 +31,8 @@ export const getQueryFn: <T>(options: {
 }) => QueryFunction<T> =
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
-    const res = await fetch(queryKey[0] as string, {
-      credentials: "include",
+    const res = await CapacitorHttp.get({
+      url: getApiUrl(queryKey[0] as string),
     });
 
     if (unauthorizedBehavior === "returnNull" && res.status === 401) {
@@ -38,7 +40,7 @@ export const getQueryFn: <T>(options: {
     }
 
     await throwIfResNotOk(res);
-    return await res.json();
+    return res.data;
   };
 
 export const queryClient = new QueryClient({

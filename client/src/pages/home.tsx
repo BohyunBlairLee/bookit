@@ -1,10 +1,11 @@
 import { useState, useCallback, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { BookSearchResult, ReadingStatus, Book } from "@shared/schema";
-import { Search, X, Plus, BookOpen, ChevronRight } from "lucide-react";
+import { X, Plus, BookOpen, ChevronRight } from "lucide-react";
 import BookBottomSheet from "@/components/BookBottomSheet";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { getApiUrl } from "@/lib/api";
 import useEmblaCarousel from 'embla-carousel-react';
 import { Link } from "wouter";
 
@@ -93,7 +94,7 @@ export default function Home() {
     queryFn: async ({ queryKey }) => {
       const searchQuery = queryKey[1] as string;
       if (!searchQuery) return { results: [], total: 0 };
-      const res = await fetch(`/api/books/search?q=${encodeURIComponent(searchQuery)}`);
+      const res = await fetch(getApiUrl(`/api/books/search?q=${encodeURIComponent(searchQuery)}`));
       if (!res.ok) throw new Error("Failed to search books");
       return res.json();
     },
@@ -104,7 +105,7 @@ export default function Home() {
   const { data: myBooks, isLoading: isLoadingBooks } = useQuery({
     queryKey: ['/api/books'],
     queryFn: async () => {
-      const res = await fetch('/api/books');
+      const res = await fetch(getApiUrl('/api/books'));
       if (!res.ok) throw new Error('Failed to fetch books');
       return res.json();
     }
@@ -160,25 +161,6 @@ export default function Home() {
         >
           <Plus size={24} />
         </button>
-      </div>
-      
-      <div className="relative mt-4">
-        <input
-          type="text"
-          className="search-input pr-8"
-          placeholder="책 제목, 작가로 검색"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyPress={handleKeyPress}
-        />
-        {query && (
-          <button
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-muted-foreground"
-            onClick={clearSearch}
-          >
-            <X size={18} />
-          </button>
-        )}
       </div>
       
       {!isSearching && (

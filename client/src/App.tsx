@@ -10,6 +10,7 @@ import SettingsPage from "@/pages/settings";
 import BookDetail from "@/pages/book-detail";
 import BottomNav from "./BottomNav";
 import { ChevronLeft } from "lucide-react";
+import { getApiUrl } from "@/lib/api";
 
 function Router() {
   return (
@@ -66,7 +67,7 @@ function Router() {
                         className="status-button"
                         onClick={() => {
                           // 책 추가 API 호출 (읽을 예정)
-                          fetch('/api/books', {
+                          fetch(getApiUrl('/api/books'), {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -88,7 +89,7 @@ function Router() {
                         className="status-button"
                         onClick={() => {
                           // 책 추가 API 호출 (읽는 중)
-                          fetch('/api/books', {
+                          fetch(getApiUrl('/api/books'), {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -110,7 +111,7 @@ function Router() {
                         className="status-button"
                         onClick={() => {
                           // 책 추가 API 호출 (완독)
-                          fetch('/api/books', {
+                          fetch(getApiUrl('/api/books'), {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({

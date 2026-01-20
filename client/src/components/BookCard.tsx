@@ -39,7 +39,7 @@ export default function BookCard({ book, isSearchResult = false }: BookCardProps
   const addBookMutation = useMutation({
     mutationFn: async (newBook: InsertBook) => {
       const res = await apiRequest("POST", "/api/books", newBook);
-      return res.json();
+      return res.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/books'] });
@@ -62,7 +62,7 @@ export default function BookCard({ book, isSearchResult = false }: BookCardProps
   const updateBookMutation = useMutation({
     mutationFn: async (updateData: UpdateBookStatus) => {
       const res = await apiRequest("PATCH", `/api/books/${updateData.id}`, updateData);
-      return res.json();
+      return res.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/books'] });

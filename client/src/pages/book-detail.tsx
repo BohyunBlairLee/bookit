@@ -5,6 +5,7 @@ import { BookOpen, ChevronLeft, Calendar, Plus, PencilLine, PenTool, Quote, Tras
 import { useToast } from "@/hooks/use-toast";
 import { HalfStarRating } from "@/lib/starRating";
 import { apiRequest } from "@/lib/queryClient";
+import { getApiUrl } from "@/lib/api";
 import { Link } from "wouter";
 
 interface BookDetailProps {
@@ -35,7 +36,7 @@ export default function BookDetail({ id }: BookDetailProps) {
   const { data: book, isLoading: isLoadingBook } = useQuery<Book>({
     queryKey: ["/api/books", id],
     queryFn: async () => {
-      const res = await fetch(`/api/books/${id}`);
+      const res = await fetch(getApiUrl(`/api/books/${id}`));
       if (!res.ok) throw new Error("Failed to fetch book");
       return res.json();
     }
@@ -44,7 +45,7 @@ export default function BookDetail({ id }: BookDetailProps) {
   const { data: notes = [], isLoading: isLoadingNotes } = useQuery<ReadingNote[]>({
     queryKey: ["/api/books", id, "notes"],
     queryFn: async () => {
-      const res = await fetch(`/api/books/${id}/notes`);
+      const res = await fetch(getApiUrl(`/api/books/${id}/notes`));
       if (!res.ok) throw new Error("Failed to fetch notes");
       return res.json();
     }
@@ -200,7 +201,7 @@ export default function BookDetail({ id }: BookDetailProps) {
       formData.append("image", file);
       
       // 서버에 이미지 전송하여 텍스트 추출
-      const response = await fetch("/api/extract-text", {
+      const response = await fetch(getApiUrl("/api/extract-text"), {
         method: "POST",
         body: formData,
       });

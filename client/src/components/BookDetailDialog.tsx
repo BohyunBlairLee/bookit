@@ -38,7 +38,7 @@ export default function BookDetailDialog({ book, open, onOpenChange }: BookDetai
   const updateBookMutation = useMutation({
     mutationFn: async (updateData: UpdateBookStatus) => {
       const res = await apiRequest("PATCH", `/api/books/${updateData.id}`, updateData);
-      return res.json();
+      return res.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/books'] });

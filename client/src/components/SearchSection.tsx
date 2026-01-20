@@ -6,6 +6,8 @@ import { Search } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import BookCard from "./BookCard";
 import { BookSearchResult } from "@shared/schema";
+import { getApiUrl } from "@/lib/api";
+import { CapacitorHttp } from '@capacitor/core';
 
 export default function SearchSection() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -40,18 +42,19 @@ export default function SearchSection() {
   const { data, isLoading } = useQuery({
     queryKey: ['/api/books/search', debouncedQuery],
     queryFn: async () => {
-      // POST 요청으로 변경하여 JSON 형식으로 검색어 전달
-      const res = await fetch(`/api/books/search`, {
-        method: 'POST',
+      // Capacitor HTTP를 사용하여 네이티브 HTTP 요청
+      const response = await CapacitorHttp.post({
+        url: getApiUrl('/api/books/search'),
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ query: debouncedQuery }),
+        data: { query: debouncedQuery },
       });
-      if (!res.ok) {
+
+      if (response.status !== 200) {
         throw new Error('검색에 실패했습니다');
       }
-      return res.json();
+      return response.data;
     },
     enabled: debouncedQuery.length > 0,
   });

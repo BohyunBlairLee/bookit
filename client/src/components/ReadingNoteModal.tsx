@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Camera, Upload, BookOpen, Pencil, Type } from "lucide-react";
 import { insertReadingNoteSchema } from "@shared/schema";
 import { toast } from "@/hooks/use-toast";
+import { getApiUrl } from "@/lib/api";
 
 interface ReadingNoteModalProps {
   bookId: number;
@@ -47,7 +48,7 @@ export default function ReadingNoteModal({
       const formData = new FormData();
       formData.append("image", file);
       
-      const response = await fetch("/api/extract-text", {
+      const response = await fetch(getApiUrl("/api/extract-text"), {
         method: "POST",
         body: formData,
       });
@@ -100,7 +101,7 @@ export default function ReadingNoteModal({
         page: 0, // 나중에 페이지 입력 필드 추가 가능
       };
       
-      const response = await fetch(`/api/books/${bookId}/notes`, {
+      const response = await fetch(getApiUrl(`/api/books/${bookId}/notes`), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
