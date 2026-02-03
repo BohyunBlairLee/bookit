@@ -14,6 +14,7 @@ import { Camera, Upload, BookOpen, Pencil, Type } from "lucide-react";
 import { insertReadingNoteSchema } from "@shared/schema";
 import { toast } from "@/hooks/use-toast";
 import { getApiUrl } from "@/lib/api";
+import { CapacitorHttp } from "@capacitor/core";
 
 interface ReadingNoteModalProps {
   bookId: number;
@@ -92,7 +93,7 @@ export default function ReadingNoteModal({
   const saveNote = async () => {
     try {
       setIsSubmitting(true);
-      
+
       let note = {
         bookId,
         type: activeTab === "quote" ? "quote" : activeTab === "thought" ? "thought" : "combined",
@@ -100,25 +101,25 @@ export default function ReadingNoteModal({
         thoughtText: activeTab === "quote" ? "" : thoughtText,
         page: 0, // 나중에 페이지 입력 필드 추가 가능
       };
-      
-      const response = await fetch(getApiUrl(`/api/books/${bookId}/notes`), {
-        method: "POST",
+
+      const response = await CapacitorHttp.post({
+        url: getApiUrl(`/api/books/${bookId}/notes`),
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(note),
+        data: note,
       });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "노트 저장 중 오류가 발생했습니다");
+
+      if (response.status < 200 || response.status >= 300) {
+        const errorData = response.data;
+        throw new Error(errorData?.message || "노트 저장 중 오류가 발생했습니다");
       }
-      
+
       toast({
         title: "노트 저장 완료",
         description: "독서 노트가 저장되었습니다.",
       });
-      
+
       resetForm();
       onOpenChange(false);
       onNoteAdded?.();

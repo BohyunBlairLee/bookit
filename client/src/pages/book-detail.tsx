@@ -5,7 +5,8 @@ import { ChevronLeft, ChevronDown, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { getApiUrl } from "@/lib/api";
-import { Link } from "wouter";
+import { useLocation } from "wouter";
+import { CapacitorHttp } from "@capacitor/core";
 import ReadingNoteModal from "@/components/ReadingNoteModal";
 
 interface BookDetailProps {
@@ -15,24 +16,29 @@ interface BookDetailProps {
 export default function BookDetail({ id }: BookDetailProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [, setLocation] = useLocation();
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
   const [showNoteModal, setShowNoteModal] = useState(false);
 
   const { data: book, isLoading: isLoadingBook } = useQuery<Book>({
     queryKey: ["/api/books", id],
     queryFn: async () => {
-      const res = await fetch(getApiUrl(`/api/books/${id}`));
-      if (!res.ok) throw new Error("Failed to fetch book");
-      return res.json();
+      const res = await CapacitorHttp.get({
+        url: getApiUrl(`/api/books/${id}`),
+      });
+      if (res.status < 200 || res.status >= 300) throw new Error("Failed to fetch book");
+      return res.data;
     }
   });
 
   const { data: notes = [], isLoading: isLoadingNotes } = useQuery<ReadingNote[]>({
     queryKey: ["/api/books", id, "notes"],
     queryFn: async () => {
-      const res = await fetch(getApiUrl(`/api/books/${id}/notes`));
-      if (!res.ok) throw new Error("Failed to fetch notes");
-      return res.json();
+      const res = await CapacitorHttp.get({
+        url: getApiUrl(`/api/books/${id}/notes`),
+      });
+      if (res.status < 200 || res.status >= 300) throw new Error("Failed to fetch notes");
+      return res.data;
     }
   });
 
@@ -94,10 +100,24 @@ export default function BookDetail({ id }: BookDetailProps) {
     }
   };
 
+  const handleGoBack = () => {
+    // 히스토리가 있으면 뒤로가기, 없으면 홈으로
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      setLocation("/");
+    }
+  };
+
   if (isLoadingBook) {
     return (
       <div className="min-h-screen bg-background">
-        <div className="flex justify-center items-center h-screen">
+        <div className="flex items-center p-4">
+          <button onClick={handleGoBack} className="text-muted-foreground">
+            <ChevronLeft size={24} />
+          </button>
+        </div>
+        <div className="flex justify-center items-center h-[80vh]">
           <p>도서 정보를 불러오는 중...</p>
         </div>
       </div>
@@ -107,7 +127,12 @@ export default function BookDetail({ id }: BookDetailProps) {
   if (!book) {
     return (
       <div className="min-h-screen bg-background">
-        <div className="flex justify-center items-center h-screen">
+        <div className="flex items-center p-4">
+          <button onClick={handleGoBack} className="text-muted-foreground">
+            <ChevronLeft size={24} />
+          </button>
+        </div>
+        <div className="flex justify-center items-center h-[80vh]">
           <p>도서를 찾을 수 없습니다.</p>
         </div>
       </div>
@@ -124,9 +149,9 @@ export default function BookDetail({ id }: BookDetailProps) {
     <div className="min-h-screen bg-background pb-20">
       {/* 헤더 - 뒤로가기 + 상태 버튼 */}
       <div className="flex items-center justify-between p-4">
-        <Link to="/" className="text-muted-foreground">
+        <button onClick={handleGoBack} className="text-muted-foreground">
           <ChevronLeft size={24} />
-        </Link>
+        </button>
 
         <div className="relative">
           <button

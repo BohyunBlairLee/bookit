@@ -8,6 +8,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { getApiUrl } from "@/lib/api";
 import useEmblaCarousel from 'embla-carousel-react';
 import { Link } from "wouter";
+import { CapacitorHttp } from "@capacitor/core";
 
 // 책 아이템 컴포넌트 (바텀시트 상태 처리를 위해 분리)
 function BookItem({ book }: { book: BookSearchResult }) {
@@ -104,9 +105,11 @@ export default function Home() {
   const { data: myBooks, isLoading: isLoadingBooks } = useQuery({
     queryKey: ['/api/books'],
     queryFn: async () => {
-      const res = await fetch(getApiUrl('/api/books'));
-      if (!res.ok) throw new Error('Failed to fetch books');
-      return res.json();
+      const res = await CapacitorHttp.get({
+        url: getApiUrl('/api/books'),
+      });
+      if (res.status < 200 || res.status >= 300) throw new Error('Failed to fetch books');
+      return res.data;
     }
   });
   
