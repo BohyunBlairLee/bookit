@@ -150,7 +150,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
-        <div className="min-h-screen bg-background">
+        <div className="h-full bg-background overflow-hidden">
           <Router />
         </div>
       </TooltipProvider>

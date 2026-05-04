@@ -74,6 +74,7 @@ html, body {
   display: flex;
   justify-content: space-around;
   padding: 0.75rem 0;
+  padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
   border-top: 1px solid var(--border);
   z-index: 50;
 }
@@ -591,8 +592,9 @@ html, body {
 
 /* 페이지 여백 조정 */
 .page-container {
-  padding: 1rem;
-  padding-bottom: 5rem;
+  height: calc(100% - 80px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* 태블릿과 데스크탑에서는 너비 제한 */
@@ -657,26 +659,15 @@ html, body {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* 🚑 Capacitor iOS touch freeze emergency fix */
+/* iOS 앱 화면 고정 레이아웃 */
 html, body {
-  position: relative !important;
-  height: auto !important;
-  overflow: auto !important;
+  height: 100%;
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
 }
 
 #root {
-  position: relative !important;
-  height: auto !important;
-  overflow: auto !important;
-}
-
-.page-container {
-  position: relative !important;
-  min-height: auto !important;
-  overflow: visible !important;
-}
-
-/* 모든 fixed overlay가 터치를 먹지 않게 */
-.fixed {
-  pointer-events: auto !important;
+  height: 100%;
+  overflow: hidden;
 }
