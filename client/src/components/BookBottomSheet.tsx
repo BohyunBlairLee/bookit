@@ -133,18 +133,18 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
   };
   
   return (
-    <SimpleBottomSheet open={open} onClose={onClose} title="책 추가하기">
-      <div className="flex mb-3">
-        <img 
+    <SimpleBottomSheet open={open} onClose={onClose}>
+      <div className="flex items-start gap-4 mb-4">
+        <img
           src={book.coverUrl}
           alt={book.title}
-          className="w-20 h-28 rounded-md object-cover mr-4"
+          className="w-28 h-40 rounded-md object-cover flex-shrink-0"
         />
-        <div>
-          <h2 className="text-lg font-medium">{book.title}</h2>
-          <p className="text-gray-500 text-sm">{book.author}</p>
+        <div className="pt-2">
+          <h2 className="text-lg font-bold">{book.title}</h2>
+          <p className="text-gray-500 text-sm mt-1">{book.author}</p>
           {book.publisher && book.publishedDate && (
-            <p className="text-gray-500 text-xs mt-1">
+            <p className="text-gray-400 text-sm mt-1">
               {book.publisher} | {book.publishedDate}
             </p>
           )}

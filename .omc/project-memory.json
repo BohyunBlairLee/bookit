@@ -1,0 +1,378 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1777913154931,
+  "projectRoot": "/Users/blair/Projects/bookit",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "express",
+        "version": "4.21.2",
+        "category": "backend"
+      },
+      {
+        "name": "react",
+        "version": "18.3.1",
+        "category": "frontend"
+      },
+      {
+        "name": "react-dom",
+        "version": "18.3.1",
+        "category": "frontend"
+      },
+      {
+        "name": "esbuild",
+        "version": "0.25.0",
+        "category": "build"
+      },
+      {
+        "name": "vite",
+        "version": "5.4.14",
+        "category": "build"
+      }
+    ],
+    "packageManager": "npm",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "npm run build 2>&1 | tail -5",
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": "npm run dev",
+    "scripts": {
+      "dev": "NODE_ENV=development tsx server/index.ts",
+      "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
+      "start": "NODE_ENV=production node dist/index.js",
+      "check": "tsc",
+      "db:push": "drizzle-kit push",
+      "cap:sync": "npm run build && npx cap sync",
+      "cap:open:ios": "npx cap open ios",
+      "cap:open:android": "npx cap open android",
+      "cap:build:android": "npm run build && npx cap sync android && cd android && ./gradlew assembleRelease",
+      "cap:build:ios": "npm run build && npx cap sync ios",
+      "generate:icons": "node generate-native-icons.mjs"
+    }
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "App 2026-01-08 21-57-14": {
+      "path": "App 2026-01-08 21-57-14",
+      "purpose": null,
+      "fileCount": 4,
+      "lastAccessed": 1777913154884,
+      "keyFiles": [
+        "App.ipa",
+        "DistributionSummary.plist",
+        "ExportOptions.plist",
+        "Packaging.log"
+      ]
+    },
+    "App 2026-01-08 22-25-25": {
+      "path": "App 2026-01-08 22-25-25",
+      "purpose": null,
+      "fileCount": 4,
+      "lastAccessed": 1777913154885,
+      "keyFiles": [
+        "App.ipa",
+        "DistributionSummary.plist",
+        "ExportOptions.plist",
+        "Packaging.log"
+      ]
+    },
+    "Tab_icon": {
+      "path": "Tab_icon",
+      "purpose": null,
+      "fileCount": 7,
+      "lastAccessed": 1777913154898,
+      "keyFiles": [
+        "Icon.Tab.Home.Active.svg",
+        "Icon.Tab.Home.Default.svg",
+        "Icon.Tab.Library.Active.svg",
+        "Icon.Tab.Library.Default.svg",
+        "Icon.Tab.Settings.Active.svg"
+      ]
+    },
+    "android": {
+      "path": "android",
+      "purpose": null,
+      "fileCount": 8,
+      "lastAccessed": 1777913154899,
+      "keyFiles": [
+        "build.gradle",
+        "capacitor.settings.gradle",
+        "gradle.properties",
+        "gradlew",
+        "gradlew.bat"
+      ]
+    },
+    "attached_assets": {
+      "path": "attached_assets",
+      "purpose": null,
+      "fileCount": 20,
+      "lastAccessed": 1777913154900,
+      "keyFiles": [
+        "Frame 4021.png",
+        "검색 (1).png",
+        "검색 (2).png",
+        "검색 (3).png",
+        "검색 (4).png"
+      ]
+    },
+    "client": {
+      "path": "client",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1777913154900,
+      "keyFiles": [
+        "index.html"
+      ]
+    },
+    "dist": {
+      "path": "dist",
+      "purpose": "Distribution/build output",
+      "fileCount": 1,
+      "lastAccessed": 1777913154901,
+      "keyFiles": [
+        "index.js"
+      ]
+    },
+    "ios": {
+      "path": "ios",
+      "purpose": null,
+      "fileCount": 3,
+      "lastAccessed": 1777913154901,
+      "keyFiles": [
+        "debug.xcconfig"
+      ]
+    },
+    "replit_agent": {
+      "path": "replit_agent",
+      "purpose": null,
+      "fileCount": 2,
+      "lastAccessed": 1777913154901,
+      "keyFiles": [
+        "architecture.md",
+        "user_preferences.md"
+      ]
+    },
+    "resources": {
+      "path": "resources",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1777913154902,
+      "keyFiles": [
+        "icon.png.svg"
+      ]
+    },
+    "server": {
+      "path": "server",
+      "purpose": null,
+      "fileCount": 7,
+      "lastAccessed": 1777913154902,
+      "keyFiles": [
+        "bookService.ts",
+        "db.ts",
+        "index.ts",
+        "routes.ts",
+        "storage.ts"
+      ]
+    },
+    "shared": {
+      "path": "shared",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1777913154902,
+      "keyFiles": [
+        "schema.ts"
+      ]
+    },
+    "android/app": {
+      "path": "android/app",
+      "purpose": "Application code",
+      "fileCount": 4,
+      "lastAccessed": 1777913154903,
+      "keyFiles": [
+        "build.gradle",
+        "capacitor.build.gradle",
+        "proguard-rules.pro"
+      ]
+    },
+    "client/public": {
+      "path": "client/public",
+      "purpose": "Public files",
+      "fileCount": 4,
+      "lastAccessed": 1777913154904,
+      "keyFiles": [
+        "favicon.ico",
+        "icon-192x192.png",
+        "icon-512x512.png"
+      ]
+    },
+    "client/src": {
+      "path": "client/src",
+      "purpose": "Source code",
+      "fileCount": 5,
+      "lastAccessed": 1777913154905,
+      "keyFiles": [
+        "App.tsx",
+        "BottomNav.tsx",
+        "index.css"
+      ]
+    },
+    "dist/public": {
+      "path": "dist/public",
+      "purpose": "Public files",
+      "fileCount": 8,
+      "lastAccessed": 1777913154905,
+      "keyFiles": [
+        "favicon.ico",
+        "icon-192x192.png",
+        "icon-512x512.png"
+      ]
+    },
+    "ios/App": {
+      "path": "ios/App",
+      "purpose": "Application code",
+      "fileCount": 1,
+      "lastAccessed": 1777913154907,
+      "keyFiles": []
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "client/src/index.css",
+      "accessCount": 23,
+      "lastAccessed": 1777915072020,
+      "type": "file"
+    },
+    {
+      "path": "client/src/pages/home.tsx",
+      "accessCount": 13,
+      "lastAccessed": 1777918474396,
+      "type": "file"
+    },
+    {
+      "path": "client/src/pages/book-detail.tsx",
+      "accessCount": 7,
+      "lastAccessed": 1777917023031,
+      "type": "file"
+    },
+    {
+      "path": "client/src/BottomNav.tsx",
+      "accessCount": 6,
+      "lastAccessed": 1777916987011,
+      "type": "file"
+    },
+    {
+      "path": "client/src/pages/my-library.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1777917137374,
+      "type": "file"
+    },
+    {
+      "path": "client/src/components/BookBottomSheet.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1777918486082,
+      "type": "file"
+    },
+    {
+      "path": "client/src/App.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1777915060123,
+      "type": "file"
+    },
+    {
+      "path": "client/src/hooks/use-toast.ts",
+      "accessCount": 3,
+      "lastAccessed": 1777918141313,
+      "type": "file"
+    },
+    {
+      "path": "client/src/components/ui/toaster.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1777918151228,
+      "type": "file"
+    },
+    {
+      "path": "client/src/pages/settings.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1777913213623,
+      "type": "file"
+    },
+    {
+      "path": "client/index.html",
+      "accessCount": 1,
+      "lastAccessed": 1777913213749,
+      "type": "file"
+    },
+    {
+      "path": "TESTFLIGHT-UPLOAD-GUIDE.md",
+      "accessCount": 1,
+      "lastAccessed": 1777913563500,
+      "type": "file"
+    },
+    {
+      "path": "capacitor.config.ts",
+      "accessCount": 1,
+      "lastAccessed": 1777913563861,
+      "type": "file"
+    },
+    {
+      "path": "client/src/components/TabIcons.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1777914830135,
+      "type": "file"
+    },
+    {
+      "path": "nixpacks.toml",
+      "accessCount": 1,
+      "lastAccessed": 1777915652993,
+      "type": "file"
+    },
+    {
+      "path": "PLAN.md",
+      "accessCount": 1,
+      "lastAccessed": 1777916973376,
+      "type": "file"
+    },
+    {
+      "path": "client/src/components/SimpleBottomSheet.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1777918446197,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

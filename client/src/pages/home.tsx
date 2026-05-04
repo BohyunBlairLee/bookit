@@ -54,13 +54,13 @@ function BookItem({ book }: { book: BookSearchResult }) {
           <img
             src={book.coverUrl}
             alt={book.title}
-            className="w-20 h-28 object-cover rounded-md"
+            className="w-28 h-40 object-cover rounded-md flex-shrink-0"
           />
-          <div>
-            <h3 className="font-medium">{book.title}</h3>
-            <p className="text-sm text-muted-foreground">{book.author}</p>
+          <div className="pt-2">
+            <h3 className="font-bold text-base">{book.title}</h3>
+            <p className="text-sm text-gray-500 mt-1">{book.author}</p>
             {book.publishedDate && (
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-sm text-gray-400 mt-1">
                 {book.publisher} | {book.publishedDate}
               </p>
             )}

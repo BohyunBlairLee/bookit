@@ -1,0 +1,12 @@
+{
+	"appId": "com.bookit.app",
+	"appName": "BookIt",
+	"webDir": "dist/public",
+	"server": {
+		"androidScheme": "https"
+	},
+	"ios": {
+		"contentInset": "always"
+	},
+	"android": {}
+}

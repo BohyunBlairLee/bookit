@@ -1,0 +1,7 @@
+{
+  "tool_name": "Read",
+  "tool_input_preview": "{\"file_path\":\"/Users/blair/.claude/projects/-Users-blair-Projects-bookit/memory/MEMORY.md\"}",
+  "error": "File does not exist. Note: your current working directory is /Users/blair/Projects/bookit.",
+  "timestamp": "2026-05-04T17:33:54.830Z",
+  "retry_count": 1
+}
