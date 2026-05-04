@@ -111,7 +111,7 @@ export default function BookDetail({ id }: BookDetailProps) {
 
   if (isLoadingBook) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="h-full bg-background overflow-y-auto">
         <div className="flex items-center p-4">
           <button onClick={handleGoBack} className="text-muted-foreground">
             <ChevronLeft size={24} />
@@ -126,7 +126,7 @@ export default function BookDetail({ id }: BookDetailProps) {
 
   if (!book) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="h-full bg-background overflow-y-auto">
         <div className="flex items-center p-4">
           <button onClick={handleGoBack} className="text-muted-foreground">
             <ChevronLeft size={24} />
@@ -146,7 +146,7 @@ export default function BookDetail({ id }: BookDetailProps) {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="h-full bg-background overflow-y-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
       {/* 헤더 - 뒤로가기 + 상태 버튼 */}
       <div className="flex items-center justify-between p-4">
         <button onClick={handleGoBack} className="text-muted-foreground">
