@@ -3,8 +3,7 @@ import { Link, useLocation } from "wouter";
 
 export default function BottomNav() {
   const [location] = useLocation();
-  const shouldShowNav = !location.includes("/book/") && 
-                        !location.includes("/search/") && 
+  const shouldShowNav = !location.includes("/search/") &&
                         !location.includes("/notes/") &&
                         location !== "/not-found";
 

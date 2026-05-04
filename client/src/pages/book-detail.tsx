@@ -111,7 +111,7 @@ export default function BookDetail({ id }: BookDetailProps) {
 
   if (isLoadingBook) {
     return (
-      <div className="h-full bg-background overflow-y-auto">
+      <div className="page-container bg-background">
         <div className="flex items-center p-4">
           <button onClick={handleGoBack} className="text-muted-foreground">
             <ChevronLeft size={24} />
@@ -126,7 +126,7 @@ export default function BookDetail({ id }: BookDetailProps) {
 
   if (!book) {
     return (
-      <div className="h-full bg-background overflow-y-auto">
+      <div className="page-container bg-background">
         <div className="flex items-center p-4">
           <button onClick={handleGoBack} className="text-muted-foreground">
             <ChevronLeft size={24} />
@@ -146,7 +146,7 @@ export default function BookDetail({ id }: BookDetailProps) {
   };
 
   return (
-    <div className="bg-background overflow-y-auto" style={{ height: '100vh', WebkitOverflowScrolling: 'touch' }}>
+    <div className="page-container bg-background">
       {/* 헤더 - 뒤로가기 + 상태 버튼 */}
       <div className="flex items-center justify-between p-4">
         <button onClick={handleGoBack} className="text-muted-foreground">
@@ -192,22 +192,24 @@ export default function BookDetail({ id }: BookDetailProps) {
         </div>
       </div>
 
-      {/* 책 정보 섹션 */}
-      <div className="flex flex-col items-center px-4 mt-8">
+      {/* 책 정보 섹션 - 수평 레이아웃 */}
+      <div className="flex items-start gap-4 px-4 mt-4">
         <img
           src={book.coverUrl}
           alt={book.title}
-          className="w-40 h-56 object-cover rounded-lg shadow-md"
+          className="w-24 h-36 object-cover rounded-lg shadow-md flex-shrink-0"
         />
-        <h2 className="text-xl font-bold mt-6 text-center">{book.title}</h2>
-        <p className="text-gray-600 mt-2 text-center">{book.author}</p>
-        <p className="text-sm text-gray-500 mt-1 text-center">
-          {book.publisher} |{" "}
-          {book.publishedDate
-            ? new Date(book.publishedDate).getFullYear() + "년 " +
-              (new Date(book.publishedDate).getMonth() + 1) + "월"
-            : "출판일 정보 없음"}
-        </p>
+        <div className="flex flex-col justify-center pt-2">
+          <h2 className="text-lg font-bold">{book.title}</h2>
+          <p className="text-gray-600 mt-1 text-sm">{book.author}</p>
+          <p className="text-sm text-gray-500 mt-1">
+            {book.publisher} |{" "}
+            {book.publishedDate
+              ? new Date(book.publishedDate).getFullYear() + "년 " +
+                (new Date(book.publishedDate).getMonth() + 1) + "월"
+              : "출판일 정보 없음"}
+          </p>
+        </div>
       </div>
 
       {/* 독서 노트 추가 버튼 */}
