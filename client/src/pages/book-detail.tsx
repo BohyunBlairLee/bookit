@@ -146,7 +146,7 @@ export default function BookDetail({ id }: BookDetailProps) {
   };
 
   return (
-    <div className="h-full bg-background overflow-y-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
+    <div className="bg-background overflow-y-auto" style={{ height: '100vh', WebkitOverflowScrolling: 'touch' }}>
       {/* 헤더 - 뒤로가기 + 상태 버튼 */}
       <div className="flex items-center justify-between p-4">
         <button onClick={handleGoBack} className="text-muted-foreground">
