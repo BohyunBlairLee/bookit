@@ -592,9 +592,10 @@ html, body {
 
 /* 페이지 여백 조정 */
 .page-container {
-  height: calc(100% - 80px);
+  height: calc(100vh - 80px);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* 태블릿과 데스크탑에서는 너비 제한 */
