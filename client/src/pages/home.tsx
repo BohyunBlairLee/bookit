@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { BookSearchResult, ReadingStatus, Book } from "@shared/schema";
-import { X, Plus, BookOpen, ChevronRight } from "lucide-react";
+import { X, Plus, ChevronLeft, ChevronRight, Search, SlidersHorizontal } from "lucide-react";
 import BookBottomSheet from "@/components/BookBottomSheet";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -173,14 +173,18 @@ export default function Home() {
             </div>
           ) : readingBooks.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-[70vh]">
-              <BookOpen size={48} className="text-muted-foreground mb-4" />
+              <span className="text-5xl mb-4">🐱</span>
               <p className="text-center text-muted-foreground">
                 읽고 있는 책이 없어요!
-                <br/>
-                책을 추가하고 독서 기록을 시작하세요 :)
               </p>
-              <button 
-                className="purple-button mt-6 max-w-xs"
+              <p className="text-center text-muted-foreground">
+                책을 추가하고
+              </p>
+              <p className="text-center text-muted-foreground">
+                독서 기록을 시작하세요 :)
+              </p>
+              <button
+                className="bg-primary text-white rounded-full px-12 py-3 font-medium mt-6"
                 onClick={() => setShowAddBookModal(true)}
               >
                 책 추가하기
@@ -276,21 +280,24 @@ export default function Home() {
       {showAddBookModal && (
         <div className="mobile-modal">
           <div className="mobile-modal-header">
-            <button 
+            <button
               className="text-muted-foreground"
               onClick={() => setShowAddBookModal(false)}
             >
-              <X size={24} />
+              <ChevronLeft size={24} />
             </button>
-            <h1 className="text-lg font-medium">책 추가하기</h1>
-            <div className="w-6"></div> {/* 오른쪽 여백 맞추기용 */}
+            <h1 className="text-lg font-medium">책 추가</h1>
+            <button className="text-muted-foreground">
+              <SlidersHorizontal size={20} />
+            </button>
           </div>
-          
-          <div className="mobile-modal-content">
-            <div className="relative mb-6">
+
+          <div className="px-4 pt-2 pb-2 bg-white">
+            <div className="relative">
+              <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                className="search-input pr-8"
+                className="w-full bg-gray-100 rounded-xl pl-10 pr-10 py-3 text-sm"
                 placeholder="책 제목, 작가로 검색"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -299,22 +306,16 @@ export default function Home() {
               />
               {query && (
                 <button
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-muted-foreground"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
                   onClick={clearSearch}
                 >
                   <X size={18} />
                 </button>
               )}
             </div>
-            
-            <button 
-              className="purple-button mb-6"
-              onClick={handleSearch}
-              disabled={!query.trim()}
-            >
-              검색
-            </button>
-            
+          </div>
+
+          <div className="mobile-modal-content">
             {isLoading ? (
               <div className="text-center py-6">
                 <p>검색 중...</p>
@@ -334,13 +335,10 @@ export default function Home() {
                 <p className="text-muted-foreground">검색 결과가 없습니다.</p>
               </div>
             ) : searchResults.length > 0 ? (
-              <div>
-                <h2 className="text-lg font-medium mb-4">검색 결과</h2>
-                <div className="space-y-4">
-                  {searchResults.map((book: BookSearchResult) => (
-                    <BookItem key={book.title + book.author} book={book} />
-                  ))}
-                </div>
+              <div className="space-y-4">
+                {searchResults.map((book: BookSearchResult) => (
+                  <BookItem key={book.title + book.author} book={book} />
+                ))}
               </div>
             ) : null}
           </div>

@@ -33,17 +33,15 @@ export default function MyLibrary() {
 
   return (
     <div className="page-container">
-      <div className="mobile-header flex justify-between items-center mb-6">
+      <div className="mobile-header">
         <h1 className="text-xl font-bold">나의 책장</h1>
         <Link to="/">
-          <button className="rounded-full w-10 h-10 flex items-center justify-center bg-gray-100">
-            <Plus className="w-5 h-5" />
-          </button>
+          <Plus size={24} />
         </Link>
       </div>
-      
+
       {/* 필터 탭 */}
-      <div className="filter-tabs flex rounded-full bg-gray-100 p-1 mb-6">
+      <div className="filter-tabs flex rounded-full bg-gray-100 p-1 mx-4 mb-4">
         {Object.entries(filterLabels).map(([key, label]) => (
           <button 
             key={key}
@@ -79,7 +77,7 @@ export default function MyLibrary() {
           </Link>
         </div>
       ) : (
-        <div className="book-grid mt-4">
+        <div className="book-grid mt-4 px-4">
           {booksToShow.map((book: Book) => (
             <BookThumbnail 
               key={book.id} 
