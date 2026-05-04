@@ -1,32 +1,24 @@
 import { Book } from "@shared/schema";
-import { useState } from "react";
-import BookDetailDialog from "./BookDetailDialog";
+import { Link } from "wouter";
 
 interface BookThumbnailProps {
   book: Book;
 }
 
 export default function BookThumbnail({ book }: BookThumbnailProps) {
-  const [showDetailDialog, setShowDetailDialog] = useState(false);
-  
   return (
-    <>
-      <div 
-        className="relative pb-[140%] cursor-pointer rounded-lg overflow-hidden shadow-md"
-        onClick={() => setShowDetailDialog(true)}
-      >
-        <img 
-          src={book.coverUrl}
-          alt={book.title}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+    <Link to={`/book/${book.id}`}>
+      <div className="cursor-pointer">
+        <div className="relative pb-[140%] rounded-lg overflow-hidden shadow-md">
+          <img
+            src={book.coverUrl}
+            alt={book.title}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        </div>
+        <p className="text-sm font-medium mt-2 truncate">{book.title}</p>
+        <p className="text-xs text-gray-500 truncate">{book.author}</p>
       </div>
-      
-      <BookDetailDialog
-        book={book}
-        open={showDetailDialog}
-        onOpenChange={setShowDetailDialog}
-      />
-    </>
+    </Link>
   );
 }
