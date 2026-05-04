@@ -1,33 +1,31 @@
 import { useToast } from "@/hooks/use-toast"
-import {
-  Toast,
-  ToastClose,
-  ToastDescription,
-  ToastProvider,
-  ToastTitle,
-  ToastViewport,
-} from "@/components/ui/toast"
+import { X, CheckCircle } from "lucide-react"
 
 export function Toaster() {
-  const { toasts } = useToast()
+  const { toasts, dismiss } = useToast()
 
   return (
-    <ToastProvider>
-      {toasts.map(function ({ id, title, description, action, ...props }) {
+    <div className="fixed bottom-24 left-4 right-4 z-[100] flex flex-col gap-2">
+      {toasts.map(function ({ id, title, description, open }) {
+        if (!open) return null
         return (
-          <Toast key={id} {...props}>
-            <div className="grid gap-1">
-              {title && <ToastTitle>{title}</ToastTitle>}
-              {description && (
-                <ToastDescription>{description}</ToastDescription>
-              )}
-            </div>
-            {action}
-            <ToastClose />
-          </Toast>
+          <div
+            key={id}
+            className="bg-white rounded-full shadow-lg border border-gray-200 px-4 py-3 flex items-center gap-3 animate-in slide-in-from-bottom-5"
+          >
+            <CheckCircle size={20} className="text-primary flex-shrink-0" />
+            <span className="text-sm font-medium flex-1 truncate">
+              {title}
+            </span>
+            <button
+              onClick={() => dismiss(id)}
+              className="text-gray-400 flex-shrink-0"
+            >
+              <X size={16} />
+            </button>
+          </div>
         )
       })}
-      <ToastViewport />
-    </ToastProvider>
+    </div>
   )
 }

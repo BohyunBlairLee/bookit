@@ -152,38 +152,25 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
       </div>
       
       {/* 상태 선택 버튼 */}
-      <div className="status-buttons grid grid-cols-3 gap-3 my-4">
-        <button 
-          className={`status-button rounded-full py-3 ${status === ReadingStatus.READING ? 'bg-primary text-white font-bold shadow-md' : 'bg-gray-100'}`}
+      <div className="grid grid-cols-3 gap-3 my-4">
+        <button
+          className={`rounded-full py-2.5 text-sm font-medium transition-all ${status === ReadingStatus.READING ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-600'}`}
           onClick={() => handleStatusChange(ReadingStatus.READING)}
         >
           읽는 중
         </button>
-        <button 
-          className={`status-button rounded-full py-3 ${status === ReadingStatus.WANT ? 'bg-primary text-white font-bold shadow-md' : 'bg-gray-100'}`}
+        <button
+          className={`rounded-full py-2.5 text-sm font-medium transition-all ${status === ReadingStatus.WANT ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-600'}`}
           onClick={() => handleStatusChange(ReadingStatus.WANT)}
         >
           읽을 예정
         </button>
-        <button 
-          className={`status-button rounded-full py-3 ${status === ReadingStatus.COMPLETED ? 'bg-primary text-white font-bold shadow-md' : 'bg-gray-100'}`}
+        <button
+          className={`rounded-full py-2.5 text-sm font-medium transition-all ${status === ReadingStatus.COMPLETED ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-600'}`}
           onClick={() => handleStatusChange(ReadingStatus.COMPLETED)}
         >
           완독!
         </button>
-      </div>
-      
-      {/* 상태 라벨 표시 */}
-      <div className="mb-4">
-        <p className={`font-semibold text-lg text-center ${
-          status === ReadingStatus.READING ? 'text-primary' : 
-          status === ReadingStatus.WANT ? 'text-primary' : 
-          status === ReadingStatus.COMPLETED ? 'text-primary' : ''
-        }`}>
-          {status === ReadingStatus.READING ? '읽는 중' : 
-           status === ReadingStatus.WANT ? '읽을 예정' : 
-           status === ReadingStatus.COMPLETED ? '완독!' : ''}
-        </p>
       </div>
       
       {/* 완독 상태일 때만 표시될 별점과 날짜 선택 */}
