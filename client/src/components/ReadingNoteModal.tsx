@@ -94,12 +94,21 @@ export default function ReadingNoteModal({
     try {
       setIsSubmitting(true);
 
-      let note = {
+      // content 조합: 인용구는 큰따옴표로 감싸고, 생각과 함께일 때 \n\n으로 구분
+      const quote = activeTab !== "thought" ? quoteText : "";
+      const thought = activeTab !== "quote" ? thoughtText : "";
+      let content = "";
+      if (quote && thought) {
+        content = `"${quote}"\n\n${thought}`;
+      } else if (quote) {
+        content = `"${quote}"`;
+      } else {
+        content = thought;
+      }
+
+      const note = {
         bookId,
-        type: activeTab === "quote" ? "quote" : activeTab === "thought" ? "thought" : "combined",
-        quoteText: activeTab === "thought" ? "" : quoteText,
-        thoughtText: activeTab === "quote" ? "" : thoughtText,
-        page: 0, // 나중에 페이지 입력 필드 추가 가능
+        content,
       };
 
       const response = await CapacitorHttp.post({
