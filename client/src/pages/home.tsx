@@ -142,12 +142,6 @@ export default function Home() {
     refetch();
   };
   
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
-  };
-  
   const clearSearch = () => {
     setQuery("");
     setIsSearching(false);
@@ -292,20 +286,20 @@ export default function Home() {
             </button>
           </div>
 
-          <div className="px-4 pt-2 pb-2 bg-white">
+          <form className="px-4 pt-2 pb-2 bg-white" onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
             <div className="relative">
               <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
-                type="text"
+                type="search"
                 className="w-full bg-gray-100 rounded-xl pl-10 pr-10 py-3 text-sm"
                 placeholder="책 제목, 작가로 검색"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                onKeyPress={handleKeyPress}
                 autoFocus
               />
               {query && (
                 <button
+                  type="button"
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
                   onClick={clearSearch}
                 >
@@ -313,7 +307,7 @@ export default function Home() {
                 </button>
               )}
             </div>
-          </div>
+          </form>
 
           <div className="mobile-modal-content">
             {isLoading ? (
