@@ -77,10 +77,10 @@ export default function MyLibrary() {
           </Link>
         </div>
       ) : (
-        <div className="book-grid mt-4 px-4">
+        <div className="grid grid-cols-3 gap-3 mt-4 px-4 pb-20">
           {booksToShow.map((book: Book) => (
-            <BookThumbnail 
-              key={book.id} 
+            <BookThumbnail
+              key={book.id}
               book={book}
             />
           ))}

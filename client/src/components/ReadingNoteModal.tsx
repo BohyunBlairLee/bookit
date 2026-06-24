@@ -45,24 +45,32 @@ export default function ReadingNoteModal({
   const handleImageUpload = async (file: File) => {
     try {
       setIsUploading(true);
-      
-      const formData = new FormData();
-      formData.append("image", file);
-      
-      const response = await fetch(getApiUrl("/api/extract-text"), {
-        method: "POST",
-        body: formData,
+
+      // 파일을 base64로 변환
+      const base64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result as string;
+          // data:image/...;base64, 부분 제거
+          resolve(result.split(",")[1]);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
       });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "이미지 업로드 중 오류가 발생했습니다");
+
+      const response = await CapacitorHttp.post({
+        url: getApiUrl("/api/extract-text"),
+        headers: { "Content-Type": "application/json" },
+        data: { imageBase64: base64 },
+      });
+
+      if (response.status < 200 || response.status >= 300) {
+        throw new Error(response.data?.message || "이미지 업로드 중 오류가 발생했습니다");
       }
-      
-      const data = await response.json();
+
       // 추출된 텍스트를 인용구 필드에 설정
-      setQuoteText(data.processedText);
-      
+      setQuoteText(response.data.processedText);
+
       toast({
         title: "텍스트 추출 완료",
         description: "이미지에서 텍스트를 추출했습니다.",

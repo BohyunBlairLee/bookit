@@ -237,22 +237,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // 이미지에서 텍스트 추출 API
+  // 이미지에서 텍스트 추출 API (base64 JSON 또는 multipart 지원)
   app.post("/api/extract-text", upload.single('image'), async (req: Request, res: Response) => {
     try {
-      if (!req.file) {
+      let imageBuffer: Buffer;
+
+      if (req.body?.imageBase64) {
+        // base64 JSON 방식 (CapacitorHttp에서 사용)
+        imageBuffer = Buffer.from(req.body.imageBase64, 'base64');
+        console.log("이미지 base64 수신:", imageBuffer.length, "bytes");
+      } else if (req.file) {
+        // multipart 방식
+        imageBuffer = req.file.buffer;
+        console.log("이미지 파일 수신:", req.file.originalname, req.file.size, "bytes");
+      } else {
         return res.status(400).json({ message: "이미지 파일이 필요합니다" });
       }
 
-      console.log("이미지 파일 수신: ", req.file.originalname, req.file.size, "bytes");
-      
       // 이미지에서 텍스트 추출
-      const extractedText = await extractTextFromImage(req.file.buffer);
-      
+      const extractedText = await extractTextFromImage(imageBuffer);
+
       // 추출된 텍스트 가공
       const processedText = processExtractedText(extractedText);
-      
-      res.json({ 
+
+      res.json({
         originalText: extractedText,
         processedText: processedText
       });

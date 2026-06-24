@@ -8,7 +8,7 @@ interface BookThumbnailProps {
 export default function BookThumbnail({ book }: BookThumbnailProps) {
   return (
     <Link to={`/book/${book.id}`}>
-      <div className="cursor-pointer">
+      <div className="cursor-pointer min-w-0">
         <div className="relative pb-[148%] rounded-lg overflow-hidden">
           <img
             src={book.coverUrl}
