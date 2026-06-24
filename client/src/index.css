@@ -650,7 +650,15 @@ html, body {
   transform: scale(0.98);
 }
 
-/* 책장 그리드 레이아웃 */
+/* 책장 그리드 레이아웃 (Figma 스펙) */
+.library-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 82px);
+  gap: 25px;
+  justify-content: center;
+  padding: 0 39px 5rem;
+}
+
 .book-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

@@ -19,6 +19,8 @@ export default function BookDetail({ id }: BookDetailProps) {
   const [, setLocation] = useLocation();
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
   const [showNoteModal, setShowNoteModal] = useState(false);
+  const [showCompletedDatePicker, setShowCompletedDatePicker] = useState(false);
+  const [completedDate, setCompletedDate] = useState("");
 
   const { data: book, isLoading: isLoadingBook } = useQuery<Book>({
     queryKey: ["/api/books", id],
@@ -80,18 +82,36 @@ export default function BookDetail({ id }: BookDetailProps) {
   const handleStatusChange = (status: string) => {
     if (!book) return;
 
+    if (status === ReadingStatus.COMPLETED) {
+      // 오늘 날짜를 기본값으로 설정하고 날짜 피커 표시
+      const today = new Date().toISOString().split("T")[0];
+      setCompletedDate(today);
+      setShowCompletedDatePicker(true);
+      setShowStatusDropdown(false);
+      return;
+    }
+
     const updateData: UpdateBookStatus = {
       id: book.id,
       status: status as "want" | "reading" | "completed"
     };
 
-    if (status === ReadingStatus.COMPLETED) {
-      updateData.completedDate = new Date().toISOString();
-      updateData.rating = book.rating || 0;
-    }
-
     updateStatusMutation.mutate(updateData);
     setShowStatusDropdown(false);
+  };
+
+  const handleCompletedDateConfirm = () => {
+    if (!book) return;
+
+    const updateData: UpdateBookStatus = {
+      id: book.id,
+      status: "completed",
+      completedDate: new Date(completedDate).toISOString(),
+      rating: book.rating || 0,
+    };
+
+    updateStatusMutation.mutate(updateData);
+    setShowCompletedDatePicker(false);
   };
 
   const handleDeleteNote = (noteId: number) => {
@@ -327,6 +347,33 @@ export default function BookDetail({ id }: BookDetailProps) {
           </div>
         )}
       </div>
+
+      {/* 완독 날짜 선택 모달 */}
+      {showCompletedDatePicker && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4" onClick={() => setShowCompletedDatePicker(false)}>
+          <div className="bg-white rounded-2xl p-6 w-full max-w-[320px]" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-lg font-bold text-center mb-4">완독 날짜</h3>
+            <input
+              type="date"
+              value={completedDate}
+              onChange={(e) => setCompletedDate(e.target.value)}
+              className="w-full border border-[var(--track)] rounded-lg px-4 py-3 text-base mb-4"
+            />
+            <button
+              className="w-full bg-primary text-white py-3 rounded-full font-medium"
+              onClick={handleCompletedDateConfirm}
+            >
+              확인
+            </button>
+            <button
+              className="w-full py-3 mt-2 text-[var(--text-secondary)] font-medium"
+              onClick={() => setShowCompletedDatePicker(false)}
+            >
+              취소
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* 독서 노트 모달 */}
       <ReadingNoteModal
