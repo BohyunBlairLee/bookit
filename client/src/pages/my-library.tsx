@@ -32,9 +32,9 @@ export default function MyLibrary() {
   };
 
   return (
-    <div className="page-container flex flex-col">
+    <div className="page-container">
       {/* 상단 고정 영역 */}
-      <div className="flex-shrink-0">
+      <div className="sticky top-0 z-10 bg-background">
         <div className="mobile-header">
           <h1 className="text-xl font-bold">나의 책장</h1>
           <Link to="/">
@@ -60,38 +60,41 @@ export default function MyLibrary() {
         </div>
       </div>
 
-      {/* 스크롤 영역 */}
-      <div className="flex-1 overflow-y-auto">
-        {isLoading ? (
-          <div className="flex justify-center items-center mt-8">
-            <p>로딩 중...</p>
-          </div>
-        ) : error ? (
-          <div className="flex justify-center items-center mt-8">
-            <p className="text-destructive">오류가 발생했습니다.</p>
-          </div>
-        ) : booksToShow.length === 0 ? (
-          <div className="flex flex-col justify-center items-center mt-12">
-            <p className="text-muted-foreground mb-4">
-              {activeTab === "all"
-                ? "아직 책이 없습니다."
-                : `${filterLabels[activeTab]} 상태인 책이 없습니다.`}
-            </p>
-            <Link to="/" className="bg-primary text-white py-3 px-6 rounded-full font-medium">
-              책 추가하기
-            </Link>
-          </div>
-        ) : (
-          <div className="library-grid">
-            {booksToShow.map((book: Book) => (
-              <BookThumbnail
-                key={book.id}
-                book={book}
-              />
-            ))}
-          </div>
-        )}
-      </div>
+      {isLoading ? (
+        <div className="flex justify-center items-center mt-8">
+          <p>로딩 중...</p>
+        </div>
+      ) : error ? (
+        <div className="flex justify-center items-center mt-8">
+          <p className="text-destructive">오류가 발생했습니다.</p>
+        </div>
+      ) : booksToShow.length === 0 ? (
+        <div className="flex flex-col justify-center items-center mt-12">
+          <p className="text-muted-foreground mb-4">
+            {activeTab === "all"
+              ? "아직 책이 없습니다."
+              : `${filterLabels[activeTab]} 상태인 책이 없습니다.`}
+          </p>
+          <Link to="/" className="bg-primary text-white py-3 px-6 rounded-full font-medium">
+            책 추가하기
+          </Link>
+        </div>
+      ) : (
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 82px)",
+          gap: "25px",
+          justifyContent: "center",
+          padding: "0 39px 5rem",
+        }}>
+          {booksToShow.map((book: Book) => (
+            <BookThumbnail
+              key={book.id}
+              book={book}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
