@@ -164,7 +164,7 @@ export default function BookDetail({ id }: BookDetailProps) {
           {showStatusDropdown && (
             <div className="absolute right-0 mt-1 w-32 bg-white shadow-lg rounded-lg py-1 z-10">
               <button
-                className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-100 ${
+                className={`w-full text-left px-3 py-2 text-sm hover:bg-[var(--surface)] ${
                   book.status === ReadingStatus.READING ? "font-semibold text-primary" : ""
                 }`}
                 onClick={() => handleStatusChange(ReadingStatus.READING)}
@@ -172,7 +172,7 @@ export default function BookDetail({ id }: BookDetailProps) {
                 읽는 중
               </button>
               <button
-                className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-100 ${
+                className={`w-full text-left px-3 py-2 text-sm hover:bg-[var(--surface)] ${
                   book.status === ReadingStatus.WANT ? "font-semibold text-primary" : ""
                 }`}
                 onClick={() => handleStatusChange(ReadingStatus.WANT)}
@@ -180,7 +180,7 @@ export default function BookDetail({ id }: BookDetailProps) {
                 읽을 예정
               </button>
               <button
-                className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-100 ${
+                className={`w-full text-left px-3 py-2 text-sm hover:bg-[var(--surface)] ${
                   book.status === ReadingStatus.COMPLETED ? "font-semibold text-primary" : ""
                 }`}
                 onClick={() => handleStatusChange(ReadingStatus.COMPLETED)}
@@ -201,8 +201,8 @@ export default function BookDetail({ id }: BookDetailProps) {
         />
         <div className="flex flex-col justify-center pt-2">
           <h2 className="text-lg font-bold">{book.title}</h2>
-          <p className="text-gray-600 mt-1 text-sm">{book.author}</p>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-[var(--text-secondary)] mt-1 text-sm">{book.author}</p>
+          <p className="text-sm text-[var(--text-secondary)] mt-1">
             {book.publisher} |{" "}
             {book.publishedDate
               ? new Date(book.publishedDate).getFullYear() + "년 " +
@@ -234,9 +234,9 @@ export default function BookDetail({ id }: BookDetailProps) {
         {isLoadingNotes ? (
           <p className="text-center py-6 text-muted-foreground">노트를 불러오는 중...</p>
         ) : notes.length === 0 ? (
-          <div className="bg-gray-100 rounded-lg p-6 text-center">
-            <p className="text-muted-foreground text-sm">독서 노트가 비었어요!</p>
-            <p className="text-muted-foreground text-sm mt-1">
+          <div className="bg-[var(--surface)] rounded-[20px] p-6 text-center">
+            <p className="text-[var(--text-muted)] text-[13px]">독서 노트가 비었어요!</p>
+            <p className="text-[var(--text-muted)] text-[13px] mt-1">
               수집하고 싶은 문장과 나의 생각을 남겨보세요
             </p>
           </div>
@@ -262,7 +262,7 @@ export default function BookDetail({ id }: BookDetailProps) {
               return (
                 <div
                   key={note.id}
-                  className="bg-white rounded-lg p-4 relative shadow-sm border border-gray-100"
+                  className="bg-white rounded-[20px] p-4 relative shadow-sm border border-[var(--track)]"
                 >
                   <div className="flex justify-between mb-2">
                     <div
@@ -278,7 +278,7 @@ export default function BookDetail({ id }: BookDetailProps) {
                       {quoteContent && <div className="w-3 h-3 rounded-full bg-purple-400 mr-1"></div>}
                       {thoughtContent && <div className="w-3 h-3 rounded-full bg-blue-400 mr-1"></div>}
                     </div>
-                    <p className="text-xs text-gray-500 text-right">
+                    <p className="text-xs text-[var(--text-secondary)] text-right">
                       {new Date(note.createdAt).toLocaleDateString("ko-KR")}
                     </p>
                   </div>
@@ -290,7 +290,7 @@ export default function BookDetail({ id }: BookDetailProps) {
                         <p className="text-xs font-medium text-purple-700">인용구</p>
                       </div>
                       <div className="bg-purple-50 border-l-4 border-purple-300 p-3 rounded-r-md">
-                        <p className="whitespace-pre-wrap text-gray-800 italic">{quoteContent}</p>
+                        <p className="whitespace-pre-wrap text-[var(--text-heading)] italic">{quoteContent}</p>
                       </div>
                     </div>
                   )}
@@ -308,14 +308,14 @@ export default function BookDetail({ id }: BookDetailProps) {
                           quoteContent ? "bg-blue-50 border-l-4 border-blue-300 p-3 rounded-r-md" : ""
                         }`}
                       >
-                        <p className="whitespace-pre-wrap text-gray-800">{thoughtContent}</p>
+                        <p className="whitespace-pre-wrap text-[var(--text-heading)]">{thoughtContent}</p>
                       </div>
                     </div>
                   )}
 
                   <div className="flex justify-end mt-3">
                     <button
-                      className="text-gray-400 hover:text-red-500 p-1"
+                      className="text-[var(--text-muted)] hover:text-red-500 p-1"
                       onClick={() => handleDeleteNote(note.id)}
                     >
                       <Trash2 size={14} />

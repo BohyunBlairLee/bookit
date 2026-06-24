@@ -89,24 +89,24 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
     return (
       <div className="calendar-modal absolute top-0 left-0 right-0 bg-white shadow-lg rounded-xl p-4 z-10">
         <div className="calendar-header flex justify-between items-center mb-2">
-          <button className="text-primary hover:bg-gray-100 p-1 rounded-full">
+          <button className="text-primary hover:bg-[var(--surface)] p-1 rounded-full">
             <ChevronLeft size={20} />
           </button>
           <h3 className="font-medium">{year}년 {month}월</h3>
-          <button className="text-primary hover:bg-gray-100 p-1 rounded-full">
+          <button className="text-primary hover:bg-[var(--surface)] p-1 rounded-full">
             <ChevronRight size={20} />
           </button>
         </div>
         
         <div className="calendar-grid">
           <div className="grid grid-cols-7 text-center mb-2">
-            <div className="text-gray-500 text-sm">일</div>
-            <div className="text-gray-500 text-sm">월</div>
-            <div className="text-gray-500 text-sm">화</div>
-            <div className="text-gray-500 text-sm">수</div>
-            <div className="text-gray-500 text-sm">목</div>
-            <div className="text-gray-500 text-sm">금</div>
-            <div className="text-gray-500 text-sm">토</div>
+            <div className="text-[var(--text-secondary)] text-sm">일</div>
+            <div className="text-[var(--text-secondary)] text-sm">월</div>
+            <div className="text-[var(--text-secondary)] text-sm">화</div>
+            <div className="text-[var(--text-secondary)] text-sm">수</div>
+            <div className="text-[var(--text-secondary)] text-sm">목</div>
+            <div className="text-[var(--text-secondary)] text-sm">금</div>
+            <div className="text-[var(--text-secondary)] text-sm">토</div>
           </div>
           
           <div className="grid grid-cols-7 gap-1">
@@ -117,7 +117,7 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
               <button
                 key={day}
                 className={`aspect-square flex items-center justify-center rounded-full text-sm
-                  ${day === selectedDay ? 'bg-primary text-white' : 'hover:bg-gray-100'}`}
+                  ${day === selectedDay ? 'bg-primary text-white' : 'hover:bg-[var(--surface)]'}`}
                 onClick={() => {
                   setCompletedDate(`${year}. ${month}. ${day}.`);
                   setShowCalendar(false);
@@ -142,9 +142,9 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
         />
         <div className="pt-2">
           <h2 className="text-lg font-bold">{book.title}</h2>
-          <p className="text-gray-500 text-sm mt-1">{book.author}</p>
+          <p className="text-[var(--text-secondary)] text-sm mt-1">{book.author}</p>
           {book.publisher && book.publishedDate && (
-            <p className="text-gray-400 text-sm mt-1">
+            <p className="text-[var(--text-muted)] text-sm mt-1">
               {book.publisher} | {book.publishedDate}
             </p>
           )}
@@ -154,19 +154,19 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
       {/* 상태 선택 버튼 */}
       <div className="grid grid-cols-3 gap-3 my-4">
         <button
-          className={`rounded-full py-2.5 text-sm font-medium transition-all ${status === ReadingStatus.READING ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-600'}`}
+          className={`rounded-full py-2.5 text-sm font-medium transition-all ${status === ReadingStatus.READING ? 'bg-primary text-white shadow-sm' : 'bg-[var(--surface)] text-[var(--text-heading)]'}`}
           onClick={() => handleStatusChange(ReadingStatus.READING)}
         >
           읽는 중
         </button>
         <button
-          className={`rounded-full py-2.5 text-sm font-medium transition-all ${status === ReadingStatus.WANT ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-600'}`}
+          className={`rounded-full py-2.5 text-sm font-medium transition-all ${status === ReadingStatus.WANT ? 'bg-primary text-white shadow-sm' : 'bg-[var(--surface)] text-[var(--text-heading)]'}`}
           onClick={() => handleStatusChange(ReadingStatus.WANT)}
         >
           읽을 예정
         </button>
         <button
-          className={`rounded-full py-2.5 text-sm font-medium transition-all ${status === ReadingStatus.COMPLETED ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-600'}`}
+          className={`rounded-full py-2.5 text-sm font-medium transition-all ${status === ReadingStatus.COMPLETED ? 'bg-primary text-white shadow-sm' : 'bg-[var(--surface)] text-[var(--text-heading)]'}`}
           onClick={() => handleStatusChange(ReadingStatus.COMPLETED)}
         >
           완독!
@@ -194,7 +194,7 @@ export default function BookBottomSheet({ book, open, onClose }: BookBottomSheet
             <div className="flex justify-between items-center mb-2">
               <p className="font-medium">완독일</p>
               <button 
-                className="bg-gray-100 px-4 py-1 rounded-md"
+                className="bg-[var(--surface)] px-4 py-1 rounded-md"
                 onClick={() => setShowCalendar(!showCalendar)}
               >
                 {completedDate}

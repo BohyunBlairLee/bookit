@@ -58,9 +58,9 @@ function BookItem({ book }: { book: BookSearchResult }) {
           />
           <div className="pt-2">
             <h3 className="font-bold text-base">{book.title}</h3>
-            <p className="text-sm text-gray-500 mt-1">{book.author}</p>
+            <p className="text-sm text-[var(--text-secondary)] mt-1">{book.author}</p>
             {book.publishedDate && (
-              <p className="text-sm text-gray-400 mt-1">
+              <p className="text-sm text-[var(--text-muted)] mt-1">
                 {book.publisher} | {book.publishedDate}
               </p>
             )}
@@ -288,10 +288,10 @@ export default function Home() {
 
           <form className="px-4 pt-2 pb-2 bg-white" onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
             <div className="relative">
-              <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-placeholder)]" />
               <input
                 type="search"
-                className="w-full bg-gray-100 rounded-xl pl-10 pr-10 py-3 text-sm"
+                className="w-full bg-[var(--surface)] rounded-[10px] pl-10 pr-10 py-3 text-sm placeholder:text-[var(--text-placeholder)]"
                 placeholder="책 제목, 작가로 검색"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -300,7 +300,7 @@ export default function Home() {
               {query && (
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-placeholder)]"
                   onClick={clearSearch}
                 >
                   <X size={18} />

@@ -41,14 +41,14 @@ export default function MyLibrary() {
       </div>
 
       {/* 필터 탭 */}
-      <div className="filter-tabs flex rounded-full bg-gray-100 p-1 mx-4 mb-4">
+      <div className="filter-tabs mx-4 mb-4">
         {Object.entries(filterLabels).map(([key, label]) => (
-          <button 
+          <button
             key={key}
-            className={`flex-1 py-2 px-4 rounded-full text-sm transition-all
-              ${activeTab === key 
-                ? 'bg-primary text-white font-bold shadow-sm' 
-                : 'text-gray-500 hover:text-gray-700'
+            className={`flex-1 py-2.5 px-4 rounded-[25px] text-sm font-medium transition-all
+              ${activeTab === key
+                ? 'bg-primary text-white'
+                : 'text-[var(--text-heading)]'
               }`}
             onClick={() => setActiveTab(key as FilterStatus)}
           >

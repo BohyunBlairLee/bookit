@@ -4,25 +4,36 @@
 
 :root {
   --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
+  --foreground: 0 0% 29%;  /* #4a4a4a */
+  --muted: 0 0% 96%;  /* #f4f4f4 */
+  --muted-foreground: 0 0% 63%;  /* #a0a0a1 */
   --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
+  --popover-foreground: 0 0% 29%;
   --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --primary: 262 83.3% 57.8%;  /* 보라색 */
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96.1%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
-  --accent: 210 40% 96.1%;
-  --accent-foreground: 222.2 47.4% 11.2%;
+  --card-foreground: 0 0% 29%;
+  --border: 0 0% 91%;  /* #e9e9e9 */
+  --input: 0 0% 96%;  /* #f4f4f4 */
+  --primary: 264 90% 64%;  /* #8c53f6 */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 96%;  /* #f4f4f4 */
+  --secondary-foreground: 0 0% 29%;
+  --accent: 0 0% 91%;  /* #e9e9e9 */
+  --accent-foreground: 0 0% 29%;
   --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-  --ring: 262 83.3% 57.8%;
+  --destructive-foreground: 0 0% 100%;
+  --ring: 264 90% 64%;
   --radius: 1rem;
+
+  /* 텍스트 색상 토큰 */
+  --text-heading: #4a4a4a;
+  --text-body: #4f4d4d;
+  --text-secondary: #6b6b6b;
+  --text-placeholder: #c6c6c6;
+  --text-muted: #a0a0a1;
+
+  /* 표면 색상 토큰 */
+  --surface: #f4f4f4;
+  --track: #e9e9e9;
 }
 
 .dark {
@@ -36,15 +47,15 @@
   --card-foreground: 210 40% 98%;
   --border: 217.2 32.6% 17.5%;
   --input: 217.2 32.6% 17.5%;
-  --primary: 262 83.3% 57.8%;
-  --primary-foreground: 210 40% 98%;
+  --primary: 264 90% 64%;
+  --primary-foreground: 0 0% 100%;
   --secondary: 217.2 32.6% 17.5%;
   --secondary-foreground: 210 40% 98%;
   --accent: 217.2 32.6% 17.5%;
   --accent-foreground: 210 40% 98%;
   --destructive: 0 62.8% 30.6%;
   --destructive-foreground: 210 40% 98%;
-  --ring: 262 83.3% 57.8%;
+  --ring: 264 90% 64%;
 }
 
 @layer base {
@@ -54,7 +65,7 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
 }
 
@@ -83,7 +94,7 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: #94a3b8;
+  color: var(--text-placeholder);
 }
 
 .bottom-nav-item.active {
@@ -126,7 +137,7 @@ html, body {
 
 .book-counter {
   font-size: 0.9rem;
-  color: #666;
+  color: var(--text-secondary);
   margin-left: auto;
 }
 
@@ -148,14 +159,14 @@ html, body {
 
 .book-author {
   font-size: 0.9rem;
-  color: #666;
+  color: var(--text-secondary);
   text-align: center;
   margin-bottom: 0.2rem;
 }
 
 .book-info {
   font-size: 0.8rem;
-  color: #888;
+  color: var(--text-muted);
   text-align: center;
   margin-bottom: 0.8rem;
 }
@@ -181,8 +192,8 @@ html, body {
 
 /* 검색 입력 스타일 */
 .search-input {
-  background: #f1f5f9;
-  border-radius: 0.75rem;
+  background: var(--surface);
+  border-radius: 10px;
   width: 100%;
   padding: 0.75rem 1rem;
   font-size: 0.875rem;
@@ -200,7 +211,7 @@ html, body {
   display: flex;
   gap: 1rem;
   padding: 0.5rem;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--track);
 }
 
 .book-cover {
@@ -228,8 +239,8 @@ html, body {
   border-radius: 0.5rem;
   font-size: 0.95rem;
   font-weight: 500;
-  background: #f1f5f9;
-  color: #64748b;
+  background: var(--surface);
+  color: var(--text-secondary);
   border: none;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -280,7 +291,7 @@ html, body {
   gap: 0;
   border-radius: 1rem;
   overflow: hidden;
-  background: #f1f5f9;
+  background: var(--surface);
   margin: 1rem 0;
 }
 
@@ -290,8 +301,8 @@ html, body {
   padding: 0.75rem 0;
   font-weight: 500;
   font-size: 0.875rem;
-  background: #f1f5f9;
-  color: #64748b;
+  background: var(--surface);
+  color: var(--text-secondary);
   border: none;
 }
 
@@ -302,7 +313,7 @@ html, body {
 
 /* 독서 노트 스타일 */
 .reading-note {
-  background: #f1f5f9;
+  background: var(--surface);
   padding: 1rem;
   border-radius: 0.75rem;
   margin-bottom: 1rem;
@@ -310,7 +321,7 @@ html, body {
 
 .reading-note-date {
   font-size: 0.75rem;
-  color: #64748b;
+  color: var(--text-secondary);
   margin-top: 0.5rem;
   text-align: right;
 }
@@ -427,13 +438,13 @@ html, body {
 .note-icon {
   font-size: 1.2rem;
   margin-right: 0.5rem;
-  color: #9ca3af;
+  color: var(--text-muted);
 }
 
 /* 독서 노트 항목 */
 .note-item {
-  background-color: #f9fafb;
-  border-radius: 1rem;
+  background-color: var(--surface);
+  border-radius: 20px;
   padding: 1rem;
   margin-bottom: 1rem;
   position: relative;
@@ -442,7 +453,7 @@ html, body {
 
 .note-item-date {
   font-size: 0.75rem;
-  color: #9ca3af;
+  color: var(--text-muted);
   text-align: right;
   position: absolute;
   top: 1rem;
@@ -560,7 +571,7 @@ html, body {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--track);
 }
 
 .mobile-modal-content {
@@ -571,7 +582,7 @@ html, body {
 
 /* 입력 필드 스타일 */
 .input-field {
-  background: #f1f5f9;
+  background: var(--surface);
   border-radius: 0.75rem;
   width: 100%;
   padding: 0.75rem 1rem;
@@ -580,7 +591,7 @@ html, body {
 }
 
 .textarea-field {
-  background: #f1f5f9;
+  background: var(--surface);
   border-radius: 0.75rem;
   width: 100%;
   padding: 0.75rem 1rem;
@@ -608,16 +619,16 @@ html, body {
   .mobile-modal {
     max-width: 480px;
     margin: 0 auto;
-    border-left: 1px solid #f1f5f9;
-    border-right: 1px solid #f1f5f9;
+    border-left: 1px solid var(--track);
+    border-right: 1px solid var(--track);
   }
 }
 
 /* 책장 필터 탭 */
 .filter-tabs {
   display: flex;
-  background-color: #f1f5f9;
-  border-radius: 9999px;
+  background-color: var(--track);
+  border-radius: 25px;
   padding: 4px;
   margin-bottom: 1.5rem;
 }
@@ -625,9 +636,11 @@ html, body {
 .filter-tabs button {
   flex: 1;
   text-align: center;
-  padding: 8px 12px;
-  border-radius: 9999px;
+  padding: 10px 12px;
+  border-radius: 25px;
   font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-heading);
   transition: all 0.2s ease;
   border: none;
   cursor: pointer;
